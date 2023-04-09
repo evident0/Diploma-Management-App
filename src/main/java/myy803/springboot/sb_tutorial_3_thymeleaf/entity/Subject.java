@@ -25,7 +25,7 @@ public class Subject {
     private Professor professor;
     // define constructors
 
-    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "subject", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private List<Application> applications = new ArrayList<>();
 
     public Subject() {
@@ -68,6 +68,11 @@ public class Subject {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "Subject [id=" + subjectId + ", title=" + title + ", description=" + description + "prof=" + professor + "]";
     }
 
 }

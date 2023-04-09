@@ -66,13 +66,6 @@ public class Thesis {
         this.description = description;
     }
 
-
-
-
-
-
-    // define tostring
-
     @Override
     public String toString() {
         return "Thesis [id=" + t_id + ", title=" + title + ", description=" + description + "]";

@@ -24,7 +24,7 @@ public class Professor {
 	@Column(name="email")
 	private String email;
 
-	@OneToMany(targetEntity = Thesis.class, cascade = CascadeType.ALL, mappedBy = "professor", fetch = FetchType.EAGER)
+	@OneToMany(targetEntity = Thesis.class, cascade = CascadeType.MERGE, mappedBy = "professor", fetch = FetchType.EAGER)
 	private List<Thesis> thesisList= new ArrayList<>();
 	// define constructors
 	

@@ -25,7 +25,15 @@ public class Student {
     //private List<> thesisList= new ArrayList<>();
     // define constructors
 
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    public List<Application> getApplications() {
+        return applications;
+    }
+
+    public void setApplications(List<Application> applications) {
+        this.applications = applications;
+    }
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private List<Application> applications = new ArrayList<>();
 
     public Student() {
@@ -37,6 +45,8 @@ public class Student {
         this.lastName = lastName;
         this.email = email;
     }
+
+
 
 
     public Student(String firstName, String lastName, String email) {
@@ -88,6 +98,6 @@ public class Student {
 
     @Override
     public String toString() {
-        return "Professor [id=" + studentId + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + "]";
+        return "Student [id=" + studentId + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + "]";
     }
 }

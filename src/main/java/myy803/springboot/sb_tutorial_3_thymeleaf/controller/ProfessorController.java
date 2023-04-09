@@ -2,7 +2,9 @@ package myy803.springboot.sb_tutorial_3_thymeleaf.controller;
 
 import java.util.List;
 
-import myy803.springboot.sb_tutorial_3_thymeleaf.entity.Thesis;
+import myy803.springboot.sb_tutorial_3_thymeleaf.dao.StudentDAO;
+import myy803.springboot.sb_tutorial_3_thymeleaf.entity.*;
+import myy803.springboot.sb_tutorial_3_thymeleaf.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -11,19 +13,21 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import myy803.springboot.sb_tutorial_3_thymeleaf.entity.Professor;
 import myy803.springboot.sb_tutorial_3_thymeleaf.service.ProfessorService;
 
 @Controller
 @RequestMapping("/professors")
 public class ProfessorController {
 
-	@Autowired
 	private ProfessorService professorService;
 
+	private StudentService studentService;
+
+
 	@Autowired
-	public ProfessorController(ProfessorService theProfessorService) {
+	public ProfessorController(ProfessorService theProfessorService, StudentService theStudentService) {
 		professorService = theProfessorService;
+		studentService = theStudentService;
 	}
 
 	@RequestMapping("/list")
@@ -34,6 +38,44 @@ public class ProfessorController {
 		System.out.println(thesisList);
 		return "helloworld";
 	}
+
+	@RequestMapping("/please")
+	public String testPlease(Model theModel) {
+
+		// get professors from db
+		List<Application> thesisList = studentService.listStudentSubjects(1);
+		System.out.println(thesisList);
+		return "helloworld";
+	}
+
+	@RequestMapping("/please_save")
+	public String testPleaseSave(Model theModel) {
+
+		// get professors from db
+		//List<Application> thesisList = studentService.listStudentSubjects(1);
+		Application application = new Application(1,5,
+				studentService.findById(1),
+				studentService.findSubjectById(5));
+		//Application application = new Application(new Student(1, "Bob",
+		//		"Smith", "bob@protonmail.com"), new Subject(5, "subject5", "d5"));
+
+		System.out.println(application);
+
+		studentService.saveApplication(application);
+
+		//thesisList.add(application);
+		//studentService.findById(1).getApplications().add(application);
+
+		studentService.findById(1).setFirstName("Not bob");
+
+		studentService.save(studentService.findById(1));
+
+		System.out.println(studentService.findById(1).getApplications());
+
+		return "helloworld";
+	}
+
+
 
 	// add mapping for "/list"
 /*

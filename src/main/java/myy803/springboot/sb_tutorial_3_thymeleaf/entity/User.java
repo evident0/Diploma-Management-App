@@ -36,8 +36,15 @@ public class User implements UserDetails{
     @OneToMany(targetEntity = Professor.class, cascade = CascadeType.MERGE, mappedBy = "user", fetch = FetchType.EAGER)
     private List<Professor> professors = new ArrayList<>();
 
+    @OneToMany(targetEntity = Student.class, cascade = CascadeType.MERGE, mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Student> students = new ArrayList<>();
+
     public List<Professor> getProfessors() {
     	return professors;
+    }
+
+    public List<Student> getStudents() {
+        return students;
     }
 
 

@@ -36,6 +36,10 @@ public class Student {
     @OneToMany(mappedBy = "student", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private List<Application> applications = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id")
+    private User user;
+
     public Student() {
 
     }

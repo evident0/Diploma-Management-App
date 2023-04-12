@@ -1,5 +1,6 @@
 package myy803.springboot.sb_tutorial_3_thymeleaf.controller;
 
+import myy803.springboot.sb_tutorial_3_thymeleaf.entity.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,20 @@ public class AdminController {
     @ResponseBody
     public String currentUserName(Authentication authentication) {
         return authentication.getName();
+    }
+
+    @RequestMapping(value = "/admin/details", method = RequestMethod.GET)
+    @ResponseBody
+    public String currentDetails(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        return Integer.toString(user.getId());
+    }
+//find by username in professor table or whatever
+    @RequestMapping(value = "/admin/more", method = RequestMethod.GET)
+    @ResponseBody
+    public String currentMore(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        return "nothing";// user.getProfessorDetails();
     }
 }
 

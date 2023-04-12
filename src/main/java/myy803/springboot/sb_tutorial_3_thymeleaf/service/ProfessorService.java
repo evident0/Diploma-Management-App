@@ -8,6 +8,8 @@ import myy803.springboot.sb_tutorial_3_thymeleaf.entity.Thesis;
 public interface ProfessorService {
 
 	public List<Professor> findAll();
+
+	public Professor findByFirstName(String firstName);
 	
 	public Professor findById(int p_Id);
 	

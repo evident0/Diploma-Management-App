@@ -2,7 +2,7 @@
 --
 -- Table structure for table `employee`
 --
-DROP TABLE IF EXISTS users;
+
 
 DROP TABLE IF EXISTS application;
 
@@ -13,10 +13,12 @@ DROP TABLE IF EXISTS thesis;
 DROP TABLE IF EXISTS professor;
 DROP TABLE IF EXISTS student;
 
+DROP TABLE IF EXISTS users;
+
 
 CREATE TABLE users (
                          `id` int NOT NULL AUTO_INCREMENT,
-                         `user_name` text DEFAULT NULL,
+                         `user_name` varchar(45) DEFAULT NULL UNIQUE,
                          `password` text DEFAULT NULL,
                          `role` text DEFAULT NULL,
                          PRIMARY KEY (`id`)
@@ -28,7 +30,9 @@ CREATE TABLE professor (
                             `first_name` varchar(45) DEFAULT NULL,
                             `last_name` varchar(45) DEFAULT NULL,
                             `email` varchar(45) DEFAULT NULL,
-                            PRIMARY KEY (`p_id`)
+                            `user_name` varchar(45) DEFAULT NULL UNIQUE,
+                            PRIMARY KEY (`p_id`),
+                            FOREIGN KEY (`user_name`) REFERENCES users(`user_name`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 CREATE TABLE student (
@@ -36,7 +40,9 @@ CREATE TABLE student (
                          `first_name` varchar(45) DEFAULT NULL,
                          `last_name` varchar(45) DEFAULT NULL,
                          `email` varchar(45) DEFAULT NULL,
-                         PRIMARY KEY (`student_id`)
+                         `user_name` varchar(45) DEFAULT NULL UNIQUE,
+                         PRIMARY KEY (`student_id`),
+                         FOREIGN KEY (`user_name`) REFERENCES users(`user_name`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 CREATE TABLE thesis (

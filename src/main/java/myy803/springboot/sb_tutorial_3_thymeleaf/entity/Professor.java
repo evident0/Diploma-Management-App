@@ -1,5 +1,7 @@
 package myy803.springboot.sb_tutorial_3_thymeleaf.entity;
 
+import com.sun.istack.NotNull;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +28,19 @@ public class Professor {
 
 	@OneToMany(targetEntity = Thesis.class, cascade = CascadeType.MERGE, mappedBy = "professor", fetch = FetchType.EAGER)
 	private List<Thesis> thesisList= new ArrayList<>();
+
+	//@ManyToOne(fetch = FetchType.EAGER)
+	//@JoinColumn(name = "user_name")
+	//Student student;
+
+	//@OneToOne(cascade = CascadeType.ALL)
+	//@JoinColumn(name = "user_name")//, referencedColumnName = "user_name")
+	//private User user;
 	// define constructors
+
+	//public User getUser() {
+	//	return user;
+	//}
 	
 	public Professor() {
 		

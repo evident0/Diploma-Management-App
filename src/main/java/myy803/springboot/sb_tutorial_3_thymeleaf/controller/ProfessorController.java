@@ -7,11 +7,10 @@ import myy803.springboot.sb_tutorial_3_thymeleaf.entity.*;
 import myy803.springboot.sb_tutorial_3_thymeleaf.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import myy803.springboot.sb_tutorial_3_thymeleaf.service.ProfessorService;
 
@@ -74,6 +73,32 @@ public class ProfessorController {
 
 		return "helloworld";
 	}
+
+	@RequestMapping(value = "/check_user", method = RequestMethod.GET)
+	@ResponseBody
+	public String checkUser() {
+		//Professor professor = professorService.findByFirstName("Apostolos");
+		professorService.findAll();
+		//User user = professor.getUser();
+		//System.out.println("THE USERNAME::::::::::::: "+professor.getFirstName());
+		return "nothing";
+	}
+
+	@RequestMapping(value = "/check", method = RequestMethod.GET)
+	@ResponseBody
+	public String currentUserName(Authentication authentication) {
+
+		return "nothing";
+
+	}
+
+		// get professors from db
+		//List<Application> thesisList = studentService.listStudentSubjects(1);
+		//Application application = new Application(1,5,
+		//		studentService.findById(1),
+		//		studentService.findSubjectById(5));
+		//Application application = new Application(new Student(1, "Bob",
+		//		"Smith", "
 
 
 

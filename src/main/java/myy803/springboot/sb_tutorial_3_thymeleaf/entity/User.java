@@ -1,8 +1,10 @@
 package myy803.springboot.sb_tutorial_3_thymeleaf.entity;
 
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import javax.persistence.*;
 
@@ -31,6 +33,12 @@ public class User implements UserDetails{
 
     //@OneToOne(mappedBy = "user")
     //private Professor professor;
+    @OneToMany(targetEntity = Professor.class, cascade = CascadeType.MERGE, mappedBy = "user", fetch = FetchType.EAGER)
+    private List<Professor> professors = new ArrayList<>();
+
+    public List<Professor> getProfessors() {
+    	return professors;
+    }
 
 
     @Override

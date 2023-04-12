@@ -27,7 +27,8 @@ public class AdminController {
     @ResponseBody
     public String currentDetails(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        return Integer.toString(user.getId());
+        //Integer.toString(user.getId())
+        return user.getProfessors().get(0).getFirstName();
     }
 //find by username in professor table or whatever
     @RequestMapping(value = "/admin/more", method = RequestMethod.GET)

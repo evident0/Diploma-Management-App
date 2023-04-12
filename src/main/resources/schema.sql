@@ -17,7 +17,7 @@ DROP TABLE IF EXISTS users;
 
 
 CREATE TABLE users (
-                         `id` int NOT NULL AUTO_INCREMENT,
+                         `id` int(11) NOT NULL AUTO_INCREMENT,
                          `user_name` varchar(45) DEFAULT NULL UNIQUE,
                          `password` text DEFAULT NULL,
                          `role` text DEFAULT NULL,
@@ -26,23 +26,23 @@ CREATE TABLE users (
 
 
 CREATE TABLE professor (
-                            `p_id` int(11) NOT NULL AUTO_INCREMENT,
+                            `p_id` int(11) NOT NULL,
                             `first_name` varchar(45) DEFAULT NULL,
                             `last_name` varchar(45) DEFAULT NULL,
                             `email` varchar(45) DEFAULT NULL,
-                            `user_name` varchar(45) DEFAULT NULL UNIQUE,
+                            `id` int(11) NOT NULL,
                             PRIMARY KEY (`p_id`),
-                            FOREIGN KEY (`user_name`) REFERENCES users(`user_name`) ON DELETE CASCADE
+                            FOREIGN KEY (`id`) REFERENCES users(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 CREATE TABLE student (
-                         `student_id` int(11) NOT NULL AUTO_INCREMENT,
+                         `student_id` int(11) NOT NULL,
                          `first_name` varchar(45) DEFAULT NULL,
                          `last_name` varchar(45) DEFAULT NULL,
                          `email` varchar(45) DEFAULT NULL,
-                         `user_name` varchar(45) DEFAULT NULL UNIQUE,
+                         `id` int(11) NOT NULL,
                          PRIMARY KEY (`student_id`),
-                         FOREIGN KEY (`user_name`) REFERENCES users(`user_name`) ON DELETE CASCADE
+                         FOREIGN KEY (`id`) REFERENCES users(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 CREATE TABLE thesis (

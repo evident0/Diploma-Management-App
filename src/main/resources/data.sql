@@ -2,7 +2,7 @@ INSERT INTO users VALUES (1,'dddd','$2a$10$FYVJLM4pC1bF21WMtki3yetKOqABMs1zZg7Tj
                          (2,'aaaa','$2a$10$rlVrrxUN78snwziqoQc4A.Jrp30kgUdSGiJ8rUodo.EjjUxI39oNC','PROFESSOR');
 
 INSERT INTO professor VALUES
-                           (1,'Apostolos','Zarras','zarras@luv2code.com','aaaa');
+                           (1,'Apostolos','Zarras','zarras@luv2code.com',2);
 
 INSERT INTO thesis VALUES
                             (1,'thesis1','Anddfhrews',1),
@@ -12,7 +12,7 @@ INSERT INTO thesis VALUES
                             (5,'thesis5','Vdhega',1);
 
 
-INSERT INTO student VALUES (1, 'Bob', 'Smith', 'bob@protonmail.com','dddd');
+INSERT INTO student VALUES (1, 'Bob', 'Smith', 'bob@protonmail.com',1);
 
 
 INSERT INTO subject VALUES (1, 'subject1', 'd1',1),

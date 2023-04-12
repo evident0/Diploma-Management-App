@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+	<title>Register</title>
+</head>
+
+
+<body>
+
+<div class="container">
+
+  <form 
+  action="#" 
+  th:action="@{/save}" th:object="${user}" method="post">
+    <h3>Registration</h3>
+    <input type="text" th:field="*{username}" placeholder="User Name" /> <br/><br/>
+     <input type="password" th:field="*{password}" placeholder="Password" /> <br/><br/>
+    <select th:field="*{role}" required>
+      <option value="">Select</option>
+      <option value="ADMIN">ADMIN</option>
+      <option value="USER">USER</option>
+    </select> <br/><br/>
+    
+    <button type="submit" class="btn btn-info col-2">Register</button> 
+    
+    <a th:href="@{/login}" class="btn btn-primary col-2"> Login</a>
+    
+    <div th:if="${param.error}"><p>Registration Error.</p></div> <br/>
+    
+    <span th:utext="${successMessage}"></span>
+</form>
+</body>
+</html>

@@ -2,6 +2,8 @@
 --
 -- Table structure for table `employee`
 --
+DROP TABLE IF EXISTS users;
+
 DROP TABLE IF EXISTS application;
 
 DROP TABLE IF EXISTS subject;
@@ -12,9 +14,13 @@ DROP TABLE IF EXISTS professor;
 DROP TABLE IF EXISTS student;
 
 
-
-
-
+CREATE TABLE users (
+                         `id` int NOT NULL AUTO_INCREMENT,
+                         `user_name` text DEFAULT NULL,
+                         `password` text DEFAULT NULL,
+                         `role` text DEFAULT NULL,
+                         PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 
 CREATE TABLE professor (

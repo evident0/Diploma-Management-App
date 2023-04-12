@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+	<title>Homepage</title>
+</head>
+
+
+<body>
+<div class="container">
+
+  <h2>Welcome to Homepage</h2>
+ 
+ <br> <br> <hr> <br> <br>
+ 
+  <div sec:authorize="hasRole('ROLE_ANONYMOUS')">
+    <p>
+    	<a th:href="@{/login}" class="btn btn-primary btn-sm mb-3" th:text="Login"></a>
+    	<a th:href="@{/register}" class="btn btn-primary btn-sm mb-3" th:text="Register"></a>
+    </p>
+  </div>
+
+  <div sec:authorize="isAuthenticated()">
+    <h4>Logged as: <span sec:authentication="name"></span></h4>
+    <h4>Has role: <span sec:authentication="authorities"></span></h4>
+    
+    <br> <br> <hr> <br> <br>
+    
+    <p sec:authorize="hasAuthority('USER')">
+    	<a th:href="@{/user/dashboard}" class="btn btn-primary btn-sm mb-3"> User Dashboard</a>
+    	<a th:href="@{/logout}" class="btn btn-danger btn-sm mb-3"> Logout</a>
+    </p>
+    
+    <p sec:authorize="hasAuthority('ADMIN')">
+    	<a th:href="@{/admin/dashboard}" class="btn btn-primary btn-sm mb-3"> Admin Dashboard</a>
+    	<a th:href="@{/logout}" class="btn btn-danger btn-sm mb-3"> Logout</a>	
+    </p>
+
+</div>
+</body>
+</html>

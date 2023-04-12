@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+	<title>Login</title>
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <form th:action="@{/login}" method="POST" >
+        <h3 th:text="Login"></h3>
+        <input type="text" name="username" th:placeholder="Username" /> <br /><br />
+        <input type="password" th:placeholder="Password" name="password" /> <br /><br />
+        <button type="Submit" class="btn btn-info col-2"> Login </button>
+        <a th:href="@{register}" class="btn btn-primary col-2"> Register </a><br />
+        
+        <div th:if="${param.error}"><p>Username or Password is invalid.</p></div> <br/>
+   
+   		<span th:utext="${successMessage}"></span>
+    </form>
+
+</div>
+
+</body>
+</html>

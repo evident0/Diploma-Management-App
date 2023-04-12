@@ -1,8 +1,8 @@
 package myy803.springboot.sb_tutorial_3_thymeleaf.entity;
 
 public enum Role {
-    USER("User"),
-    ADMIN("Admin");
+    STUDENT("Student"),
+    PROFESSOR("Professor");
 
     private final String value;
 

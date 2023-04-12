@@ -33,10 +33,10 @@ public class User implements UserDetails{
 
     //@OneToOne(mappedBy = "user")
     //private Professor professor;
-    @OneToMany(targetEntity = Professor.class, cascade = CascadeType.MERGE, mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = Professor.class, cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
     private List<Professor> professors = new ArrayList<>();
 
-    @OneToMany(targetEntity = Student.class, cascade = CascadeType.MERGE, mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(targetEntity = Student.class, cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
     private List<Student> students = new ArrayList<>();
 
     public List<Professor> getProfessors() {

@@ -88,6 +88,7 @@ public class ProfessorController {
 	@ResponseBody
 	public String currentUserName(Authentication authentication) {
 
+		//professorService.save(new Professor("Apostolos", "Kouzoupis", "dsfsd"));
 		return "nothing";
 
 	}

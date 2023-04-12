@@ -65,6 +65,9 @@ public class Professor {
 	}
 
 	// define getter/setter
+	public void setUser(User user) {
+		this.user = user;
+	}
 	
 	public int getPId() {
 		return p_id;

@@ -26,7 +26,7 @@ CREATE TABLE users (
 
 
 CREATE TABLE professor (
-                            `p_id` int(11) NOT NULL,
+                            `p_id` int(11) NOT NULL AUTO_INCREMENT,
                             `first_name` varchar(45) DEFAULT NULL,
                             `last_name` varchar(45) DEFAULT NULL,
                             `email` varchar(45) DEFAULT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE professor (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 CREATE TABLE student (
-                         `student_id` int(11) NOT NULL,
+                         `student_id` int(11) NOT NULL AUTO_INCREMENT,
                          `first_name` varchar(45) DEFAULT NULL,
                          `last_name` varchar(45) DEFAULT NULL,
                          `email` varchar(45) DEFAULT NULL,

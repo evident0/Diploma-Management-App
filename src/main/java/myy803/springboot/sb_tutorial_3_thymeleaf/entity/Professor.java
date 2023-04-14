@@ -15,7 +15,7 @@ public class Professor {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="p_id")
-	private int p_id;
+	private int pId;
 	
 	@Column(name="first_name")
 	private String firstName;
@@ -42,19 +42,26 @@ public class Professor {
 	//private User user;
 	// define constructors
 
-	//public User getUser() {
-	//	return user;
-	//}
+	public User getUser() {
+		return user;
+	}
 	
 	public Professor() {
 		
 	}
 	
 	public Professor(int p_id, String firstName, String lastName, String email) {
-		this.p_id = p_id;
+		this.pId = p_id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
+	}
+
+	public void copyFields(Professor professor) {
+		this.pId = professor.pId;
+		this.firstName = professor.firstName;
+		this.lastName = professor.lastName;
+		this.email = professor.email;
 	}
 
 
@@ -70,11 +77,11 @@ public class Professor {
 	}
 	
 	public int getPId() {
-		return p_id;
+		return pId;
 	}
 
 	public void setPId(int p_id) {
-		this.p_id = p_id;
+		this.pId = p_id;
 	}
 
 	public String getFirstName() {
@@ -110,7 +117,7 @@ public class Professor {
 
 	@Override
 	public String toString() {
-		return "Professor [id=" + p_id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + "]";
+		return "Professor [id=" + pId + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + "]";
 	}
 		
 }

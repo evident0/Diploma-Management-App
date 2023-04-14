@@ -52,8 +52,10 @@ public class ProfessorController {
 
 		// get professors from db
 		//List<Application> thesisList = studentService.listStudentSubjects(1);
+		Student bob = studentService.findById(1);
+
 		Application application = new Application(1,5,
-				studentService.findById(1),
+				bob,
 				studentService.findSubjectById(5));
 		//Application application = new Application(new Student(1, "Bob",
 		//		"Smith", "bob@protonmail.com"), new Subject(5, "subject5", "d5"));
@@ -65,11 +67,29 @@ public class ProfessorController {
 		//thesisList.add(application);
 		//studentService.findById(1).getApplications().add(application);
 
-		studentService.findById(1).setFirstName("Not bob");
+		//bob.setFirstName("Not bob");
 
-		studentService.save(studentService.findById(1));
+		//studentService.save(bob);
 
-		System.out.println(studentService.findById(1).getApplications());
+		System.out.println(bob.getApplications());
+
+		return "helloworld";
+	}
+
+	@RequestMapping(value = "/user_change")
+	public String currentDetailsChangeName(Authentication authentication) {
+
+		User user = (User) authentication.getPrincipal();
+
+		Professor professor = user.getProfessor();
+
+		System.out.println(professor);
+
+		professor.setFirstName("newName");
+
+		professorService.save(professor);
+
+		System.out.println("THE NAMEEEEEEEEEEEEEE====== "+user.getProfessor());
 
 		return "helloworld";
 	}

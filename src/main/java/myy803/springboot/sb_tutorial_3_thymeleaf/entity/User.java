@@ -33,7 +33,7 @@ public class User implements UserDetails{
 
     //@OneToOne(mappedBy = "user")
     //private Professor professor;
-    @OneToOne(targetEntity = Professor.class, cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToOne(targetEntity = Professor.class, cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
     private Professor professor;
 
     @OneToOne(targetEntity = Student.class, cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)

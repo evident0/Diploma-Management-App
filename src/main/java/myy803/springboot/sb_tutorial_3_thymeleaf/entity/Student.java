@@ -40,6 +40,10 @@ public class Student {
     @JoinColumn(name = "id")
     private User user;
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public Student() {
 
     }

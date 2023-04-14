@@ -34,7 +34,7 @@ public class UserController {
     public String currentDetails(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         //Integer.toString(user.getId())
-        return user.getStudents().get(0).getFirstName();
+        return user.getStudent().getFirstName();
     }
 
     @RequestMapping(value = "/user/change", method = RequestMethod.GET)
@@ -42,10 +42,10 @@ public class UserController {
     public String currentDetailsChangeName(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         //Integer.toString(user.getId())
-        user.getStudents().get(0).setFirstName("new name");
+        user.getStudent().setFirstName("new name");
 
-        studentService.save(user.getStudents().get(0));
+        studentService.save(user.getStudent());
 //lol
-        return user.getStudents().get(0).getFirstName();
+        return user.getStudent().getFirstName();
     }
 }

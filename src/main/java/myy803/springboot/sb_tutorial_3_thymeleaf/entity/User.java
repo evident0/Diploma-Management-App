@@ -33,18 +33,18 @@ public class User implements UserDetails{
 
     //@OneToOne(mappedBy = "user")
     //private Professor professor;
-    @OneToMany(targetEntity = Professor.class, cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
-    private List<Professor> professors = new ArrayList<>();
+    @OneToOne(targetEntity = Professor.class, cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
+    private Professor professor;
 
-    @OneToMany(targetEntity = Student.class, cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
-    private List<Student> students = new ArrayList<>();
+    @OneToOne(targetEntity = Student.class, cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
+    private Student student;
 
-    public List<Professor> getProfessors() {
-    	return professors;
+    public Professor getProfessor() {
+    	return professor;
     }
 
-    public List<Student> getStudents() {
-        return students;
+    public Student getStudent() {
+        return student;
     }
 
 

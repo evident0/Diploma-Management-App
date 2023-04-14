@@ -29,8 +29,8 @@ public class Professor {
 	@OneToMany(targetEntity = Thesis.class, cascade = CascadeType.MERGE, mappedBy = "professor", fetch = FetchType.EAGER)
 	private List<Thesis> thesisList= new ArrayList<>();
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "id")
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "id", referencedColumnName = "id")
 	private User user;
 
 	//@ManyToOne(fetch = FetchType.EAGER)

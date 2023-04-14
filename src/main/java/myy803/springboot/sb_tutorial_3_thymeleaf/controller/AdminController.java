@@ -28,14 +28,14 @@ public class AdminController {
     public String currentDetails(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         //Integer.toString(user.getId())
-        return user.getProfessors().get(0).getFirstName();
+        return user.getProfessor().getFirstName();
     }
 //find by username in professor table or whatever
     @RequestMapping(value = "/admin/more", method = RequestMethod.GET)
     @ResponseBody
     public String currentMore(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        return "nothing";// user.getProfessorDetails();
+        return user.getProfessor().getThesis().toString();// user.getProfessorDetails();
     }
 }
 

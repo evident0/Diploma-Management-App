@@ -11,7 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-
+//TODO: change all references of admin to professor
 @Controller
 public class AdminController {
 
@@ -37,10 +37,9 @@ public class AdminController {
     @ResponseBody
     public String currentDetails(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        //Integer.toString(user.getId())
         return user.getProfessor().getFirstName();
     }
-//find by username in professor table or whatever
+
     @RequestMapping(value = "/admin/get_thesis", method = RequestMethod.GET)
     @ResponseBody
     public String currentMore(Authentication authentication) {
@@ -49,14 +48,11 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/admin/change")
-    public String currentDetailsChangeName(Authentication authentication,
+    public String changeDetails(Authentication authentication,
                                            Model theModel) {
 
         User user = (User) authentication.getPrincipal();
-
         Professor professor = user.getProfessor();
-        System.out.println(professor);
-        System.out.println("THE USERNAMEMMMMMMM====== "+professor.getUser().getUsername());
 
         theModel.addAttribute("professor", professor);
 
@@ -69,11 +65,9 @@ public class AdminController {
         User user = (User) authentication.getPrincipal();
         Professor professor = user.getProfessor();
         // We use copyFields because saving the object theProfessor directly will not update User.professor
-        // therefore we save User.getProfessor()
         professor.copyFields(theProfessor);
-
+        // therefore we save User.professor
         professorService.save(professor);
-
 
         return "redirect:/admin/dashboard";
     }

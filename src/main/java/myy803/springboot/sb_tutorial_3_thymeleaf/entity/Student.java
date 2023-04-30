@@ -36,6 +36,14 @@ public class Student {
     @OneToMany(mappedBy = "student", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private List<Application> applications = new ArrayList<>();
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id", referencedColumnName = "id")
+    private User user;
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public Student() {
 
     }
@@ -45,9 +53,6 @@ public class Student {
         this.lastName = lastName;
         this.email = email;
     }
-
-
-
 
     public Student(String firstName, String lastName, String email) {
         this.firstName = firstName;

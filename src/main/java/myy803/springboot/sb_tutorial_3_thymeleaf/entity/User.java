@@ -1,17 +1,12 @@
 package myy803.springboot.sb_tutorial_3_thymeleaf.entity;
 
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -36,11 +31,32 @@ public class User implements UserDetails{
     @Column(name="role")
     private Role role;
 
+    //@OneToOne(mappedBy = "user")
+    //private Professor professor;
+    @OneToOne(targetEntity = Professor.class, cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
+    private Professor professor;
+
+    @OneToOne(targetEntity = Student.class, cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
+    private Student student;
+
+    public Professor getProfessor() {
+    	return professor;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.name());
         return Collections.singletonList(authority);
     }
+
+   // public String getProfessorDetails() {
+    //	return professor.getFirstName() + " " + professor.getLastName();
+   // }
 
     @Override
     public String getPassword() {

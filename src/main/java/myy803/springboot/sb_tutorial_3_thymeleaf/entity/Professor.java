@@ -1,5 +1,7 @@
 package myy803.springboot.sb_tutorial_3_thymeleaf.entity;
 
+import com.sun.istack.NotNull;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +15,7 @@ public class Professor {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="p_id")
-	private int p_id;
+	private int pId;
 	
 	@Column(name="first_name")
 	private String firstName;
@@ -26,17 +28,40 @@ public class Professor {
 
 	@OneToMany(targetEntity = Thesis.class, cascade = CascadeType.MERGE, mappedBy = "professor", fetch = FetchType.EAGER)
 	private List<Thesis> thesisList= new ArrayList<>();
+
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "id", referencedColumnName = "id")
+	private User user;
+
+	//@ManyToOne(fetch = FetchType.EAGER)
+	//@JoinColumn(name = "user_name")
+	//Student student;
+
+	//@OneToOne(cascade = CascadeType.ALL)
+	//@JoinColumn(name = "user_name")//, referencedColumnName = "user_name")
+	//private User user;
 	// define constructors
+
+	public User getUser() {
+		return user;
+	}
 	
 	public Professor() {
 		
 	}
 	
 	public Professor(int p_id, String firstName, String lastName, String email) {
-		this.p_id = p_id;
+		this.pId = p_id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
+	}
+
+	public void copyFields(Professor professor) {
+		this.pId = professor.pId;
+		this.firstName = professor.firstName;
+		this.lastName = professor.lastName;
+		this.email = professor.email;
 	}
 
 
@@ -47,13 +72,16 @@ public class Professor {
 	}
 
 	// define getter/setter
+	public void setUser(User user) {
+		this.user = user;
+	}
 	
 	public int getPId() {
-		return p_id;
+		return pId;
 	}
 
 	public void setPId(int p_id) {
-		this.p_id = p_id;
+		this.pId = p_id;
 	}
 
 	public String getFirstName() {
@@ -89,7 +117,7 @@ public class Professor {
 
 	@Override
 	public String toString() {
-		return "Professor [id=" + p_id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + "]";
+		return "Professor [id=" + pId + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + "]";
 	}
 		
 }

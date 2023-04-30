@@ -7,11 +7,10 @@ import myy803.springboot.sb_tutorial_3_thymeleaf.entity.*;
 import myy803.springboot.sb_tutorial_3_thymeleaf.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import myy803.springboot.sb_tutorial_3_thymeleaf.service.ProfessorService;
 
@@ -53,8 +52,10 @@ public class ProfessorController {
 
 		// get professors from db
 		//List<Application> thesisList = studentService.listStudentSubjects(1);
+		Student bob = studentService.findById(1);
+
 		Application application = new Application(1,5,
-				studentService.findById(1),
+				bob,
 				studentService.findSubjectById(5));
 		//Application application = new Application(new Student(1, "Bob",
 		//		"Smith", "bob@protonmail.com"), new Subject(5, "subject5", "d5"));
@@ -66,14 +67,59 @@ public class ProfessorController {
 		//thesisList.add(application);
 		//studentService.findById(1).getApplications().add(application);
 
-		studentService.findById(1).setFirstName("Not bob");
+		//bob.setFirstName("Not bob");
 
-		studentService.save(studentService.findById(1));
+		//studentService.save(bob);
 
-		System.out.println(studentService.findById(1).getApplications());
+		System.out.println(bob.getApplications());
 
 		return "helloworld";
 	}
+
+	@RequestMapping(value = "/user_change")
+	public String currentDetailsChangeName(Authentication authentication) {
+
+		User user = (User) authentication.getPrincipal();
+
+		Professor professor = user.getProfessor();
+
+		System.out.println(professor);
+
+		professor.setFirstName("newName");
+
+		professorService.save(professor);
+
+		System.out.println("THE NAMEEEEEEEEEEEEEE====== "+user.getProfessor());
+
+		return "helloworld";
+	}
+
+	@RequestMapping(value = "/check_user", method = RequestMethod.GET)
+	@ResponseBody
+	public String checkUser() {
+		//Professor professor = professorService.findByFirstName("Apostolos");
+		professorService.findAll();
+		//User user = professor.getUser();
+		//System.out.println("THE USERNAME::::::::::::: "+professor.getFirstName());
+		return "nothing";
+	}
+
+	@RequestMapping(value = "/check", method = RequestMethod.GET)
+	@ResponseBody
+	public String currentUserName(Authentication authentication) {
+
+		//professorService.save(new Professor("Apostolos", "Kouzoupis", "dsfsd"));
+		return "nothing";
+
+	}
+
+		// get professors from db
+		//List<Application> thesisList = studentService.listStudentSubjects(1);
+		//Application application = new Application(1,5,
+		//		studentService.findById(1),
+		//		studentService.findSubjectById(5));
+		//Application application = new Application(new Student(1, "Bob",
+		//		"Smith", "
 
 
 

@@ -47,6 +47,20 @@ public class ProfessorServiceImpl implements ProfessorService {
 
 	@Override
 	@Transactional
+	public Professor findByFirstName(String firstName) {
+		Professor result = professorRepository.findByFirstName(firstName);
+
+		if (result != null ) {
+			return result;
+		}
+		else {
+			// we didn't find the Professor
+			throw new RuntimeException("Did not find Professor id - " + firstName);
+		}
+	}
+
+	@Override
+	@Transactional
 	public void save(Professor theProfessor) {
 		professorRepository.save(theProfessor);
 	}

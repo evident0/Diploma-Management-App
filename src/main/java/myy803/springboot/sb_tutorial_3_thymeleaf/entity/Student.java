@@ -40,6 +40,10 @@ public class Student {
     @JoinColumn(name = "id", referencedColumnName = "id")
     private User user;
 
+    @OneToOne(mappedBy = "student", fetch = FetchType.LAZY)
+    private Thesis thesis;
+
+
     public void setUser(User user) {
         this.user = user;
     }
@@ -93,6 +97,19 @@ public class Student {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public Thesis getThesis() {
+    	return thesis;
+    }
+
+
+    public void copyFields(Student student) {
+        this.studentId = student.studentId;
+        this.firstName = student.firstName;
+        this.lastName = student.lastName;
+        this.email = student.email;
+    }
+
 
     // define tostring
 

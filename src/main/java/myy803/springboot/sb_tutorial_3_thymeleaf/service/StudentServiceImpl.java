@@ -22,10 +22,14 @@ public class StudentServiceImpl implements StudentService {
     private ApplicationDAO applicationRepository;
 
     @Autowired
-    public StudentServiceImpl(StudentDAO theStudentRepository, SubjectDAO theSubjectRepository, ApplicationDAO theApplicationRepository) {
+    private SubjectDAO subjectDAO;
+
+    @Autowired
+    public StudentServiceImpl(StudentDAO theStudentRepository, SubjectDAO theSubjectRepository, ApplicationDAO theApplicationRepository, SubjectDAO subjectDAO) {
         studentRepository = theStudentRepository;
         subjectRepository = theSubjectRepository;
         applicationRepository = theApplicationRepository;
+        this.subjectDAO = subjectDAO;
     }
 
     public StudentServiceImpl() {
@@ -91,6 +95,10 @@ public class StudentServiceImpl implements StudentService {
         studentRepository.deleteById(studentId);
     }
 
+    public List<Subject> getAvailableSubjects() {
 
+        List<Subject> subjects = subjectDAO.findAll();
+        return subjects;
+    }
 
 }

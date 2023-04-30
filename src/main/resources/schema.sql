@@ -6,9 +6,11 @@
 
 DROP TABLE IF EXISTS application;
 
+DROP TABLE IF EXISTS thesis;
+
 DROP TABLE IF EXISTS subject;
 
-DROP TABLE IF EXISTS thesis;
+
 
 DROP TABLE IF EXISTS professor;
 DROP TABLE IF EXISTS student;
@@ -45,16 +47,6 @@ CREATE TABLE student (
                          FOREIGN KEY (`id`) REFERENCES users(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
-CREATE TABLE thesis (
-                            `t_id` int(11) NOT NULL AUTO_INCREMENT,
-                            `title` varchar(45) DEFAULT NULL,
-                            `description` varchar(128) DEFAULT NULL,
-                            `p_id` int(11) NOT NULL,
-                            PRIMARY KEY (`t_id`),
-                            FOREIGN KEY (`p_id`) REFERENCES professor(`p_id`) ON DELETE CASCADE
-
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
-
 CREATE TABLE subject (
                          `subject_id` int(11) NOT NULL AUTO_INCREMENT,
                          `title` varchar(45) DEFAULT NULL,
@@ -64,6 +56,22 @@ CREATE TABLE subject (
                          FOREIGN KEY (`p_id`) REFERENCES professor(`p_id`) ON DELETE CASCADE
 
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+CREATE TABLE thesis (
+                            `t_id` int(11) NOT NULL AUTO_INCREMENT,
+                            `title` varchar(45) DEFAULT NULL,
+                            `description` varchar(128) DEFAULT NULL,
+                            `p_id` int(11) NOT NULL,
+                            `subject_id` int(11) NOT NULL,
+                            `student_id` int(11) NOT NULL,
+                            PRIMARY KEY (`t_id`),
+                            FOREIGN KEY (`p_id`) REFERENCES professor(`p_id`) ON DELETE CASCADE,
+                            FOREIGN KEY (`subject_id`) REFERENCES subject(`subject_id`) ON DELETE CASCADE,
+                            FOREIGN KEY (`student_id`) REFERENCES student(`student_id`) ON DELETE CASCADE
+
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+
 
 CREATE TABLE application (
                              subject_id int(11) NOT NULL,

@@ -24,4 +24,6 @@ public interface StudentService {
 
 
     public List<Application> listStudentSubjects(int studentId);
+
+    public List<Subject> getAvailableSubjects();
 }

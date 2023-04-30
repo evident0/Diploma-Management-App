@@ -24,6 +24,15 @@ public class Thesis {
     private Professor professor;
     // define constructors
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "subject_id", referencedColumnName = "subject_id")
+    private Subject subject;
+
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "student_id", referencedColumnName = "student_id")
+    private Student student;
+
     public Thesis() {
 
     }

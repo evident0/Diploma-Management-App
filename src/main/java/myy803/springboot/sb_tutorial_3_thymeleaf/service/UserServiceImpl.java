@@ -1,11 +1,11 @@
 package myy803.springboot.sb_tutorial_3_thymeleaf.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import myy803.springboot.sb_tutorial_3_thymeleaf.dao.StudentDAO;
-import myy803.springboot.sb_tutorial_3_thymeleaf.entity.Professor;
-import myy803.springboot.sb_tutorial_3_thymeleaf.entity.Role;
-import myy803.springboot.sb_tutorial_3_thymeleaf.entity.Student;
+import myy803.springboot.sb_tutorial_3_thymeleaf.dao.SubjectDAO;
+import myy803.springboot.sb_tutorial_3_thymeleaf.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import myy803.springboot.sb_tutorial_3_thymeleaf.dao.UserDAO;
 import myy803.springboot.sb_tutorial_3_thymeleaf.dao.ProfessorDAO;
-import myy803.springboot.sb_tutorial_3_thymeleaf.entity.User;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -34,7 +33,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	private StudentDAO studentDAO;
 
 
-	
+
+
 	@Override
 	@Transactional
 	public void saveUser(User user) {
@@ -73,4 +73,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	                        String.format("USER_NOT_FOUND", username)
 	                ));
 	}
+
+
+
 }

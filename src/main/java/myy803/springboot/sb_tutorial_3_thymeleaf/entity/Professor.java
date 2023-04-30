@@ -26,12 +26,15 @@ public class Professor {
 	@Column(name="email")
 	private String email;
 
-	@OneToMany(targetEntity = Thesis.class, cascade = CascadeType.MERGE, mappedBy = "professor", fetch = FetchType.EAGER)
+	@OneToMany(targetEntity = Thesis.class, cascade = CascadeType.MERGE, mappedBy = "professor", fetch = FetchType.LAZY)
 	private List<Thesis> thesisList= new ArrayList<>();
 
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id", referencedColumnName = "id")
 	private User user;
+
+	@OneToMany(mappedBy = "professor", fetch = FetchType.EAGER)
+	private List<Subject> subjects = new ArrayList<>();
 
 	//@ManyToOne(fetch = FetchType.EAGER)
 	//@JoinColumn(name = "user_name")

@@ -32,6 +32,9 @@ public class Subject {
 
     }
 
+    @OneToOne(mappedBy = "subject", fetch = FetchType.LAZY)
+    private Thesis thesis;
+
     public Subject(int subjectId, String title, String description) {
         this.subjectId = subjectId;
         this.title = title;

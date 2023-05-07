@@ -73,6 +73,14 @@ public class Subject {
         this.description = description;
     }
 
+    public Professor getProfessor() {
+        return professor;
+    }
+
+    public void setProfessor(Professor professor) {
+        this.professor = professor;
+    }
+
     @Override
     public String toString() {
         return "Subject [id=" + subjectId + ", title=" + title + ", description=" + description + "prof=" + professor + "]";

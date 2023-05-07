@@ -1,4 +1,6 @@
+/*
 package myy803.springboot.sb_tutorial_3_thymeleaf.controller;
+
 
 import java.util.List;
 
@@ -124,7 +126,7 @@ public class ProfessorController {
 
 
 	// add mapping for "/list"
-/*
+
 	@RequestMapping("/list")
 	public String listProfessors(Model theModel) {
 
@@ -186,8 +188,10 @@ public class ProfessorController {
 		return "redirect:/professors/list";
 
 	}
-	*/
+
 }
+*/
+
 
 
 

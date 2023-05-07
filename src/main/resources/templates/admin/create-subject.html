@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+  <title>Professor Information</title>
+</head>
+
+<body>
+
+<div class="container">
+
+  <hr>
+
+  <p class="h4 mb-4">Create Subject </p>
+
+  <form th:action="@{/admin/save_subject}"
+        th:object="${subject}" method="POST">
+
+    <label>Title:</label><br>
+    <input type="text" th:field="*{title}"
+           class="form-control mb-4 col-4" placeholder="Subject Title">
+
+    <label>Description:</label><br>
+    <input type="text" th:field="*{description}"
+           class="form-control mb-4 col-4" placeholder="Subject Description">
+
+    <button type="submit" class="btn btn-info col-2">Save</button>
+
+  </form>
+
+  <hr>
+  <a th:href="@{/admin/dashboard}">Back to Dashboard</a>-->
+
+</div>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+

@@ -43,6 +43,10 @@ public class User implements UserDetails{
     	return professor;
     }
 
+    public void setProfessor(Professor professor) {
+    	this.professor = professor;
+    }
+
     public Student getStudent() {
         return student;
     }

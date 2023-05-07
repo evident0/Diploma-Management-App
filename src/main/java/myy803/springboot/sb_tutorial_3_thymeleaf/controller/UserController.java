@@ -61,8 +61,6 @@ public class UserController {
         //Integer.toString(user.getId())
         Student student = user.getStudent();
 
-
-
         return student.getThesis().getTitle();
     }
 

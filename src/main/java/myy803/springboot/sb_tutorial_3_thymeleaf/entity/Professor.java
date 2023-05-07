@@ -33,7 +33,7 @@ public class Professor {
 	@JoinColumn(name = "id", referencedColumnName = "id")
 	private User user;
 
-	@OneToMany(mappedBy = "professor", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "professor", fetch = FetchType.LAZY)
 	private List<Subject> subjects = new ArrayList<>();
 
 	//@ManyToOne(fetch = FetchType.EAGER)
@@ -116,6 +116,10 @@ public class Professor {
 
 	public List<Thesis> getThesis() {
 		return thesisList;
+	}
+
+	public List<Subject> getSubjects() {
+		return subjects;
 	}
 
 	@Override

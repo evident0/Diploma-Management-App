@@ -3,6 +3,8 @@ package myy803.springboot.sb_tutorial_3_thymeleaf.service;
 import java.util.List;
 
 import myy803.springboot.sb_tutorial_3_thymeleaf.dao.ProfessorDAO;
+import myy803.springboot.sb_tutorial_3_thymeleaf.dao.SubjectDAO;
+import myy803.springboot.sb_tutorial_3_thymeleaf.entity.Subject;
 import myy803.springboot.sb_tutorial_3_thymeleaf.entity.Thesis;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,10 +17,14 @@ public class ProfessorServiceImpl implements ProfessorService {
 
 	@Autowired
 	private ProfessorDAO professorRepository;
+
+	@Autowired
+	private SubjectDAO subjectRepository;
 	
 	@Autowired
-	public ProfessorServiceImpl(ProfessorDAO theProfessorRepository) {
+	public ProfessorServiceImpl(ProfessorDAO theProfessorRepository, SubjectDAO theSubjectRepository) {
 		professorRepository = theProfessorRepository;
+		subjectRepository = theSubjectRepository;
 	}
 	
 	public ProfessorServiceImpl() {
@@ -63,6 +69,18 @@ public class ProfessorServiceImpl implements ProfessorService {
 	@Transactional
 	public void save(Professor theProfessor) {
 		professorRepository.save(theProfessor);
+	}
+
+	@Override
+	@Transactional
+	public void saveSubject(Subject theSubject) {
+		subjectRepository.save(theSubject);
+	}
+
+	@Override
+	@Transactional
+	public void deleteSubjectById(int s_Id){
+		subjectRepository.deleteById(s_Id);
 	}
 
 	@Override

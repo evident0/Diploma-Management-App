@@ -43,6 +43,14 @@ public class Thesis {
         this.description = description;
     }
 
+    public Thesis(Subject subject, Student student) {
+        this.title = subject.getTitle();
+        this.description = subject.getDescription();
+        this.professor = subject.getProfessor();
+        this.subject = subject;
+        this.student = student;
+    }
+
 
     public Thesis(String title, String description) {
         this.title = title;

@@ -63,14 +63,6 @@ public class AdminController {
         return "redirect:/admin/dashboard";
     }
 
-    @RequestMapping(value = "/admin/applications")
-    public String viewApplications(@RequestParam("subjectId") int theId, Model theModel) {
-        List<Student> students = professorService.findStudentsBySubjectId(theId);
-        theModel.addAttribute("studentList",students);
-        theModel.addAttribute("subjectId",theId);
-        return "/admin/applications";
-    }
-
     @RequestMapping(value = "/admin/username", method = RequestMethod.GET)
     @ResponseBody
     public String currentUserName(Authentication authentication) {
@@ -114,6 +106,14 @@ public class AdminController {
         return "redirect:/admin/dashboard";
     }
 
+    @RequestMapping(value = "/admin/applications")
+    public String viewApplications(@RequestParam("subjectId") int theId, Model theModel) {
+        List<Student> students = professorService.findStudentsBySubjectId(theId);
+        theModel.addAttribute("studentList",students);
+        theModel.addAttribute("subjectId",theId);
+        return "/admin/applications";
+    }
+
     @PostMapping("/admin/pick-student")
     public String pickStudent(@RequestParam("pickMethod") String pickMethod, @RequestParam("subjectId") int theId){
         List<Student> students = professorService.findStudentsBySubjectId(theId);
@@ -126,12 +126,10 @@ public class AdminController {
                 context.setStrategy(new FewestCoursesSelection());
                 break;
             default:
-                //select student by random
                 context.setStrategy(new RandomSelection());
                 break;
         }
-        Student result = context.selectApplicant(students);
-        System.out.println(result);
+        assignThesis(context.selectApplicant(students), professorService.findSubjectById(theId));
         return "redirect:/admin/dashboard";
     }
 
@@ -140,9 +138,18 @@ public class AdminController {
                                    @RequestParam("subjectId") int theId){
         List<Student> students = professorService.findStudentsBySubjectId(theId);
         Context context = new Context(new ThresholdSelection(th1, th2));
-        Student result = context.selectApplicant(students);
-        System.out.println(result);
+        assignThesis(context.selectApplicant(students), professorService.findSubjectById(theId));
         return "redirect:/admin/dashboard";
     }
+
+     private void assignThesis(Student student, Subject subject){
+         if(student!=null) {
+             Thesis newTheis = new Thesis(subject, student);
+             professorService.saveThesis(newTheis);
+             ApplicationKey applicationId = new ApplicationKey(subject.getSubjectId(),student.getStudentId());
+             professorService.deleteApplicationById(applicationId);
+         }
+     }
+
 }
 

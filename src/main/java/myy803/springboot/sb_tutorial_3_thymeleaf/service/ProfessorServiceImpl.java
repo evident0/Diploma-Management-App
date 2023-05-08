@@ -6,6 +6,7 @@ import java.util.List;
 import myy803.springboot.sb_tutorial_3_thymeleaf.dao.ApplicationDAO;
 import myy803.springboot.sb_tutorial_3_thymeleaf.dao.ProfessorDAO;
 import myy803.springboot.sb_tutorial_3_thymeleaf.dao.SubjectDAO;
+import myy803.springboot.sb_tutorial_3_thymeleaf.dao.ThesisDAO;
 import myy803.springboot.sb_tutorial_3_thymeleaf.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,12 +22,18 @@ public class ProfessorServiceImpl implements ProfessorService {
 	private SubjectDAO subjectRepository;
 
 	@Autowired
+	private ThesisDAO thesisRepository;
+
+	@Autowired
 	private ApplicationDAO applicationRepository;
 	
 	@Autowired
-	public ProfessorServiceImpl(ProfessorDAO theProfessorRepository, SubjectDAO theSubjectRepository, ApplicationDAO theApplicationRepository) {
+	public ProfessorServiceImpl(ProfessorDAO theProfessorRepository, SubjectDAO theSubjectRepository,
+								ThesisDAO theThesisRepository, ApplicationDAO theApplicationRepository) {
 		professorRepository = theProfessorRepository;
 		subjectRepository = theSubjectRepository;
+		thesisRepository = theThesisRepository;
+		applicationRepository = theApplicationRepository;
 	}
 	
 	public ProfessorServiceImpl() {
@@ -109,6 +116,12 @@ public class ProfessorServiceImpl implements ProfessorService {
 
 	@Override
 	@Transactional
+	public void saveThesis(Thesis theThesis) {
+		thesisRepository.save(theThesis);
+	}
+
+	@Override
+	@Transactional
 	public void saveSubject(Subject theSubject) {
 		subjectRepository.save(theSubject);
 	}
@@ -117,6 +130,12 @@ public class ProfessorServiceImpl implements ProfessorService {
 	@Transactional
 	public void deleteSubjectById(int s_Id){
 		subjectRepository.deleteById(s_Id);
+	}
+
+	@Override
+	@Transactional
+	public void deleteApplicationById(ApplicationKey applicationId){
+		applicationRepository.deleteById(applicationId);
 	}
 
 	@Override

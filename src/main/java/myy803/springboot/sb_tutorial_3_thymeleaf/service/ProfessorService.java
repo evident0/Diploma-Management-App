@@ -18,11 +18,15 @@ public interface ProfessorService {
 
 	public void saveSubject(Subject theSubject);
 
+	public void saveThesis(Thesis theThesis);
+
 	public List<Student> findStudentsBySubjectId(int subjectId);
 	
 	public void deleteById(int p_Id);
 
 	public void deleteSubjectById(int s_Id);
+
+	public void deleteApplicationById(ApplicationKey applicationId);
 
 	public List<Thesis> findThesisByPId(int p_Id);
 	

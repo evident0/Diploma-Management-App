@@ -13,4 +13,14 @@ public class ApplicationKey implements Serializable {
     @Column(name = "student_id")
     int studentId;
 
+    public ApplicationKey() {
+
+    }
+
+    public ApplicationKey(int subjectId, int studentId) {
+        this.subjectId = subjectId;
+        this.studentId = studentId;
+    }
+
+
 }

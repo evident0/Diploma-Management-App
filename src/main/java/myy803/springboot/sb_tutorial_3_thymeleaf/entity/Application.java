@@ -23,9 +23,7 @@ public class Application {
     Subject subject;
 
     public Application(int studentId, int subjectId, Student student, Subject subject) {
-        ApplicationKey applicationKey = new ApplicationKey();
-        applicationKey.studentId = studentId;
-        applicationKey.subjectId = subjectId;
+        ApplicationKey applicationKey = new ApplicationKey(subjectId, studentId);
 
         id = applicationKey;
 

@@ -9,6 +9,9 @@ public class RandomSelection implements SelectionStrategy{
 
     @Override
     public Student selectApplicant(List<Student> applicants) {
+        if(applicants.size()==0){
+            return null;
+        }
         Random random = new Random();
         int index = random.nextInt(applicants.size());
         return applicants.get(index);

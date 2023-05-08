@@ -19,6 +19,9 @@ public class Thesis {
     @Column(name="description")
     private String description;
 
+    @Column(name="grade")
+    private float grade;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "p_id")
     private Professor professor;
@@ -41,6 +44,7 @@ public class Thesis {
         this.t_id = t_id;
         this.title = title;
         this.description = description;
+        this.grade = 0;
     }
 
     public Thesis(Subject subject, Student student) {
@@ -49,6 +53,7 @@ public class Thesis {
         this.professor = subject.getProfessor();
         this.subject = subject;
         this.student = student;
+        this.grade = 0;
     }
 
 
@@ -67,6 +72,10 @@ public class Thesis {
         this.t_id = t_id;
     }
 
+    public Student getStudent(){
+        return student;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -79,13 +88,21 @@ public class Thesis {
         return description;
     }
 
+    public float getGrade() {
+        return grade;
+    }
+
+    public void setGrade(float grade){
+        this.grade = (float) grade;
+    }
+
     public void setDescription(String description) {
         this.description = description;
     }
 
     @Override
     public String toString() {
-        return "Thesis [id=" + t_id + ", title=" + title + ", description=" + description + "]";
+        return "Thesis [id=" + t_id + ", title=" + title + ", description=" + description +", grade=" +grade+ "]";
     }
 
 }

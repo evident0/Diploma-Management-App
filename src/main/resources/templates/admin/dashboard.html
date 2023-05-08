@@ -31,7 +31,37 @@
       <a th:href="@{/admin/change}" class="btn btn-primary btn-sm mb-3">Update Information</a>
   </div>
 
+    <h3>My assigned theses</h3>
+    <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Student</th>
+            <th>Grade</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
 
+        <tbody>
+        <tr th:each="thesis : ${thesisList}">
+
+            <td th:text="${thesis.title}" />
+            <td th:text="${thesis.description}" />
+            <td th:text="${thesis.getStudent().getFirstName()} +' '+
+            ${thesis.getStudent().getLastName()} + ', ' + ${thesis.getStudent().getEmail()}"/>
+            <td th:text="${thesis.getGrade()}"></td>
+            <td>
+                <a th:href="@{/admin/update-grade(thesisId=${thesis.getTId()})}"
+                   class="btn btn-primary btn-sm mb-3">Update Grade</a>
+            <td/>
+        </tr>
+        </tbody>
+    </table>
+
+
+    <h3>My Subjects</h3>
     <table class="table table-bordered table-striped">
         <thead class="thead-dark">
         <tr>
@@ -47,12 +77,6 @@
             <td th:text="${subject.title}" />
             <td th:text="${subject.description}" />
             <td>
-                <!--
-                 Add "update" button/link
-                <a th:href="@{/employees/showFormForUpdate(employeeId=${tempEmployee.id})}"
-                   class="btn btn-info btn-sm">
-                    Update
-                </a>-->
 
                 <a th:href="@{/admin/delete-subject(subjectId=${subject.subjectId})}"
                    class="btn btn-danger btn-sm"
@@ -62,7 +86,7 @@
 
                 <a th:href="@{/admin/applications(subjectId=${subject.subjectId})}"
                    class="btn btn-info btn-sm">
-                   View Applications
+                    View Applications
                 </a>
 
             </td>

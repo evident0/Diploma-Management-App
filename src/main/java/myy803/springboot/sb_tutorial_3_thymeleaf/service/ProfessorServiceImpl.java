@@ -149,6 +149,29 @@ public class ProfessorServiceImpl implements ProfessorService {
 		return professorRepository.findById(p_Id).getThesis();
 	}
 
+	public Thesis findThesisById(int t_Id) {
+		return thesisRepository.findById(t_Id);
+	}
+
+	public void assignThesis(Student student, Subject subject){
+		if(student!=null) {
+			Thesis newTheis = new Thesis(subject, student);
+			saveThesis(newTheis);
+			ApplicationKey applicationId = new ApplicationKey(subject.getSubjectId(),student.getStudentId());
+			deleteApplicationById(applicationId);
+		}
+	}
+
+	public float calculateGrade(float gradeI, float gradeR, float gradeP){
+		return (float)(0.7*gradeI + 0.15*gradeR + 0.15*gradeP);
+	}
+
+	public void saveThesisGrade(Thesis thesis, float grade){
+		thesis.setGrade(grade);
+		thesisRepository.save(thesis);
+	}
+
+
 }
 
 

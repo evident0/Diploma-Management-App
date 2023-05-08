@@ -29,5 +29,13 @@ public interface ProfessorService {
 	public void deleteApplicationById(ApplicationKey applicationId);
 
 	public List<Thesis> findThesisByPId(int p_Id);
+
+	public Thesis findThesisById(int t_Id);
+
+	public void assignThesis(Student student, Subject subject);
+
+	public float calculateGrade(float gradeI, float gradeR, float gradeP);
+
+	public void saveThesisGrade(Thesis thesis, float grade);
 	
 }

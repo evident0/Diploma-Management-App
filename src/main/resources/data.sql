@@ -17,7 +17,7 @@ INSERT INTO student VALUES (1, 'Bob', 'Smith', 'bob@protonmail.com',10,1.5,1);
 
 
 INSERT INTO thesis VALUES
-                            (1,'thesis1','Anddfhrews',1,1,1);
+                            (1,'thesis1','Anddfhrews',0,1,1,1);
 --                            (2,'thesis2','Baudhdmgarten',1,1,1),
 --                            (3,'thesis3','Gupgdfhta',1,1,1),
 --                            (4,'thesis4','Pedhtrov',1,1,1),

@@ -63,6 +63,7 @@ CREATE TABLE thesis (
                             `t_id` int(11) NOT NULL AUTO_INCREMENT,
                             `title` varchar(45) DEFAULT NULL,
                             `description` varchar(128) DEFAULT NULL,
+                            `grade` float(11) DEFAULT NULL,
                             `p_id` int(11) NOT NULL,
                             `subject_id` int(11) NOT NULL,
                             `student_id` int(11) NOT NULL,

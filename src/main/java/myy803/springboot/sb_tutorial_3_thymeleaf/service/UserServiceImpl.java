@@ -33,18 +33,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	private StudentDAO studentDAO;
 
 
-
-
 	@Override
 	@Transactional
 	public void saveUser(User user) {
 		String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
 
-
-
         userDAO.save(user);
-
 
 		if (user.getRole() == Role.PROFESSOR) {
 			Professor professor = new Professor("test","test","test");
@@ -52,7 +47,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 			System.out.println("THE ID ::::::: professor: " + professor.getPId());
 			professorDAO.save(professor);
 		}else if (user.getRole() == Role.STUDENT) {
-			Student student = new Student("test","test","test");
+			Student student = new Student("test","test","test", 0,0);
 			student.setUser(user);
 			System.out.println("THE ID ::::::: student: " + student.getStudentId());
 			studentDAO.save(student);

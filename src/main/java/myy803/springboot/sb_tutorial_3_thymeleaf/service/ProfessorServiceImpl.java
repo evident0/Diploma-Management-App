@@ -1,16 +1,15 @@
 package myy803.springboot.sb_tutorial_3_thymeleaf.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import myy803.springboot.sb_tutorial_3_thymeleaf.dao.ApplicationDAO;
 import myy803.springboot.sb_tutorial_3_thymeleaf.dao.ProfessorDAO;
 import myy803.springboot.sb_tutorial_3_thymeleaf.dao.SubjectDAO;
-import myy803.springboot.sb_tutorial_3_thymeleaf.entity.Subject;
-import myy803.springboot.sb_tutorial_3_thymeleaf.entity.Thesis;
+import myy803.springboot.sb_tutorial_3_thymeleaf.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import myy803.springboot.sb_tutorial_3_thymeleaf.entity.Professor;
 
 @Service
 public class ProfessorServiceImpl implements ProfessorService {
@@ -20,9 +19,12 @@ public class ProfessorServiceImpl implements ProfessorService {
 
 	@Autowired
 	private SubjectDAO subjectRepository;
+
+	@Autowired
+	private ApplicationDAO applicationRepository;
 	
 	@Autowired
-	public ProfessorServiceImpl(ProfessorDAO theProfessorRepository, SubjectDAO theSubjectRepository) {
+	public ProfessorServiceImpl(ProfessorDAO theProfessorRepository, SubjectDAO theSubjectRepository, ApplicationDAO theApplicationRepository) {
 		professorRepository = theProfessorRepository;
 		subjectRepository = theSubjectRepository;
 	}
@@ -48,6 +50,40 @@ public class ProfessorServiceImpl implements ProfessorService {
 		else {
 			// we didn't find the Professor
 			throw new RuntimeException("Did not find Professor id - " + p_Id);
+		}
+	}
+
+	@Override
+	@Transactional
+	public List<Student> findStudentsBySubjectId(int subjectId) {
+		Subject subject = subjectRepository.findById(subjectId);
+		List<Application> applications = subject.getApplications();
+		List<Student> students = new ArrayList<Student>();
+		for(Application application : applications){
+			students.add(application.getStudent());
+		}
+
+
+		if (students != null ) {
+			return students;
+		}
+		else {
+			// we didn't find the Subject
+			throw new RuntimeException("Did not find Subject id - " + subjectId);
+		}
+	}
+
+	@Override
+	@Transactional
+	public Subject findSubjectById(int subjectId) {
+		Subject result = subjectRepository.findById(subjectId);
+
+		if (result != null ) {
+			return result;
+		}
+		else {
+			// we didn't find the Subject
+			throw new RuntimeException("Did not find Subject id - " + subjectId);
 		}
 	}
 

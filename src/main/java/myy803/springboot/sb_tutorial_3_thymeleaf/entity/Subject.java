@@ -81,6 +81,10 @@ public class Subject {
         this.professor = professor;
     }
 
+    public List<Application> getApplications(){
+        return applications;
+    }
+
     @Override
     public String toString() {
         return "Subject [id=" + subjectId + ", title=" + title + ", description=" + description + "prof=" + professor + "]";

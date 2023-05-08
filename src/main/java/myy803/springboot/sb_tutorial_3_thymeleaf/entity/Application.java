@@ -37,6 +37,10 @@ public class Application {
 
     }
 
+    public Student getStudent(){
+        return student;
+    }
+
     public String toString() {
         return "Application [id=" + id + ", student=" + student + ", subject=" + subject + "]\n";
     }

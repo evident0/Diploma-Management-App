@@ -22,7 +22,6 @@ public interface StudentService {
 
     public void deleteById(int studentId);
 
-
     public List<Application> listStudentSubjects(int studentId);
 
     public List<Subject> getAvailableSubjects();

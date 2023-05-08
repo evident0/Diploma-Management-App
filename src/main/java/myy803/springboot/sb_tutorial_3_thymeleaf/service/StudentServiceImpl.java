@@ -17,8 +17,10 @@ public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentDAO studentRepository;
 
+    @Autowired
     private SubjectDAO subjectRepository;
 
+    @Autowired
     private ApplicationDAO applicationRepository;
 
     @Autowired
@@ -69,6 +71,8 @@ public class StudentServiceImpl implements StudentService {
             throw new RuntimeException("Did not find Subject id - " + subjectId);
         }
     }
+
+
 
     @Override
     public List<Application> listStudentSubjects(int studentId) {

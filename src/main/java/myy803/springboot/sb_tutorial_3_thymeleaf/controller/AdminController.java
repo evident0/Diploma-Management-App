@@ -1,11 +1,7 @@
 package myy803.springboot.sb_tutorial_3_thymeleaf.controller;
 
-import myy803.springboot.sb_tutorial_3_thymeleaf.entity.Professor;
-import myy803.springboot.sb_tutorial_3_thymeleaf.entity.Subject;
-import myy803.springboot.sb_tutorial_3_thymeleaf.entity.Thesis;
-import myy803.springboot.sb_tutorial_3_thymeleaf.entity.User;
-import myy803.springboot.sb_tutorial_3_thymeleaf.service.ProfessorService;
-import myy803.springboot.sb_tutorial_3_thymeleaf.service.StudentService;
+import myy803.springboot.sb_tutorial_3_thymeleaf.entity.*;
+import myy803.springboot.sb_tutorial_3_thymeleaf.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -65,9 +61,15 @@ public class AdminController {
 
         // redirect to /employees/list ACTION
         return "redirect:/admin/dashboard";
-
     }
 
+    @RequestMapping(value = "/admin/applications")
+    public String viewApplications(@RequestParam("subjectId") int theId, Model theModel) {
+        List<Student> students = professorService.findStudentsBySubjectId(theId);
+        theModel.addAttribute("studentList",students);
+        theModel.addAttribute("subjectId",theId);
+        return "/admin/applications";
+    }
 
     @RequestMapping(value = "/admin/username", method = RequestMethod.GET)
     @ResponseBody
@@ -95,9 +97,7 @@ public class AdminController {
 
         User user = (User) authentication.getPrincipal();
         Professor professor = user.getProfessor();
-
         theModel.addAttribute("professor", professor);
-
         return "admin/professor-details";
     }
 
@@ -111,6 +111,37 @@ public class AdminController {
         // therefore we save User.professor
         professorService.save(professor);
 
+        return "redirect:/admin/dashboard";
+    }
+
+    @PostMapping("/admin/pick-student")
+    public String pickStudent(@RequestParam("pickMethod") String pickMethod, @RequestParam("subjectId") int theId){
+        List<Student> students = professorService.findStudentsBySubjectId(theId);
+        Context context = new Context();
+        switch (pickMethod) {
+            case "bestAVG":
+                context.setStrategy(new BestGradeSelection());
+                break;
+            case "fewestCourses":
+                context.setStrategy(new FewestCoursesSelection());
+                break;
+            default:
+                //select student by random
+                context.setStrategy(new RandomSelection());
+                break;
+        }
+        Student result = context.selectApplicant(students);
+        System.out.println(result);
+        return "redirect:/admin/dashboard";
+    }
+
+    @PostMapping("/admin/pick-bythresholds")
+    public String pickByThresholds(@RequestParam("th1") float th1, @RequestParam("th2") int th2,
+                                   @RequestParam("subjectId") int theId){
+        List<Student> students = professorService.findStudentsBySubjectId(theId);
+        Context context = new Context(new ThresholdSelection(th1, th2));
+        Student result = context.selectApplicant(students);
+        System.out.println(result);
         return "redirect:/admin/dashboard";
     }
 }

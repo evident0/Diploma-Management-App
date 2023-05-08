@@ -21,6 +21,12 @@ public class Student {
     @Column(name="email")
     private String email;
 
+    @Column(name="remaining_courses")
+    private int remainingCourses;
+
+    @Column(name="average_grade")
+    private float averageGrade;
+
     //@OneToMany(targetEntity = Thesis.class, cascade = CascadeType.ALL, mappedBy = "professor", fetch = FetchType.EAGER)
     //private List<> thesisList= new ArrayList<>();
     // define constructors
@@ -51,17 +57,21 @@ public class Student {
     public Student() {
 
     }
-    public Student(int studentId, String firstName, String lastName, String email) {
+    public Student(int studentId, String firstName, String lastName, String email, int remainingCourses, float averageGrade) {
         this.studentId = studentId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.remainingCourses = remainingCourses;
+        this.averageGrade = averageGrade;
     }
 
-    public Student(String firstName, String lastName, String email) {
+    public Student(String firstName, String lastName, String email, int remainingCourses, float averageGrade) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.remainingCourses = remainingCourses;
+        this.averageGrade = averageGrade;
     }
 
     // define getter/setter
@@ -96,6 +106,19 @@ public class Student {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void setRemainingCourses(int remainingCourses) {
+    	this.remainingCourses = remainingCourses;
+    }
+    public int getRemainingCourses() {
+    	return remainingCourses;
+    }
+    public void setAverageGrade(float averageGrade) {
+    	this.averageGrade = averageGrade;
+    }
+    public float getAverageGrade() {
+    	return averageGrade;
     }
 
     public Thesis getThesis() {

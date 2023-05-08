@@ -85,6 +85,10 @@ public class User implements UserDetails{
         this.id = id;
     }
 
+    public void setStudent(Student student) {
+    	this.student = student;
+    }
+
     public void setUsername(String username) {
         this.username = username;
     }

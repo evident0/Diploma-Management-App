@@ -13,15 +13,16 @@ INSERT INTO subject VALUES (1, 'subject1', 'd1',1),
                            (5, 'subject5', 'd5',1);
 
 
-INSERT INTO student VALUES (1, 'Bob', 'Smith', 'bob@protonmail.com',1);
+INSERT INTO student VALUES (1, 'Bob', 'Smith', 'bob@protonmail.com',10,1.5,1);
 
 
 INSERT INTO thesis VALUES
-                            (1,'thesis1','Anddfhrews',1,1,1),
-                            (2,'thesis2','Baudhdmgarten',1,1,1),
-                            (3,'thesis3','Gupgdfhta',1,1,1),
-                            (4,'thesis4','Pedhtrov',1,1,1),
-                            (5,'thesis5','Vdhega',1,1,1);
+                            (1,'thesis1','Anddfhrews',1,1,1);
+--                            (2,'thesis2','Baudhdmgarten',1,1,1),
+--                            (3,'thesis3','Gupgdfhta',1,1,1),
+--                            (4,'thesis4','Pedhtrov',1,1,1),
+--                            (5,'thesis5','Vdhega',1,1,1);
+
 
 
 

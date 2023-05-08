@@ -1,18 +1,13 @@
 package myy803.springboot.sb_tutorial_3_thymeleaf.controller;
 
-import myy803.springboot.sb_tutorial_3_thymeleaf.entity.Professor;
-import myy803.springboot.sb_tutorial_3_thymeleaf.entity.Student;
-import myy803.springboot.sb_tutorial_3_thymeleaf.entity.User;
+import myy803.springboot.sb_tutorial_3_thymeleaf.entity.*;
 import myy803.springboot.sb_tutorial_3_thymeleaf.service.ProfessorService;
 import myy803.springboot.sb_tutorial_3_thymeleaf.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class UserController {
@@ -25,10 +20,18 @@ public class UserController {
     }
 
     @RequestMapping("/user/dashboard")
-    public String getUserHome(){
-//    	 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//		 String currentPrincipalName = authentication.getName();
-//		 System.err.println(currentPrincipalName);
+    public String getUserHome(Authentication authentication,
+                              Model theModel){
+//         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//         String currentPrincipalName = authentication.getName();
+//         System.err.println(currentPrincipalName);
+
+        User user = (User) authentication.getPrincipal();
+        user.setStudent(studentService.findById(user.getStudent().getStudentId()));
+        Student student = user.getStudent();
+        theModel.addAttribute("student", student);
+        theModel.addAttribute("subjectList", studentService.getAvailableSubjects());
+
 
         return "user/dashboard";
     }
@@ -52,8 +55,6 @@ public class UserController {
 
 
 
-
-
     @RequestMapping(value = "/user/thesis", method = RequestMethod.GET)
     @ResponseBody
     public String showThesis(Authentication authentication) {
@@ -62,6 +63,34 @@ public class UserController {
         Student student = user.getStudent();
 
         return student.getThesis().getTitle();
+    }
+
+    @RequestMapping(value ="/user/apply-subject")
+    public String applySubject(@RequestParam("subjectId") int theId, @RequestParam("thisStudentId") int theStudentId) {
+
+        Student student = studentService.findById(theStudentId);
+        Subject subject = studentService.findSubjectById(theId);
+
+        Application theApplication = new Application(theStudentId,theId,student,subject);
+        studentService.saveApplication(theApplication);
+
+
+        return "redirect:/user/dashboard";
+
+    }
+
+    @RequestMapping("/user/available-subjects")
+    public String getUserAvailableSubjects(Authentication authentication,
+                                           Model theModel){
+
+        User user = (User) authentication.getPrincipal();
+        int studentId = user.getStudent().getStudentId();
+
+
+        theModel.addAttribute("subjectList", studentService.getAvailableSubjects());
+        theModel.addAttribute("student", studentId);
+
+        return "user/available-subjects";
     }
 
 

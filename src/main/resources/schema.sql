@@ -42,6 +42,8 @@ CREATE TABLE student (
                          `first_name` varchar(45) DEFAULT NULL,
                          `last_name` varchar(45) DEFAULT NULL,
                          `email` varchar(45) DEFAULT NULL,
+                         `remaining_courses` int(11) DEFAULT NULL,
+                         `average_grade` float(11) DEFAULT NULL,
                          `id` int(11) NOT NULL,
                          PRIMARY KEY (`student_id`),
                          FOREIGN KEY (`id`) REFERENCES users(`id`) ON DELETE CASCADE

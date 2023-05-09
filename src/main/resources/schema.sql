@@ -5,16 +5,10 @@
 
 
 DROP TABLE IF EXISTS application;
-
 DROP TABLE IF EXISTS thesis;
-
 DROP TABLE IF EXISTS subject;
-
-
-
 DROP TABLE IF EXISTS professor;
 DROP TABLE IF EXISTS student;
-
 DROP TABLE IF EXISTS users;
 
 

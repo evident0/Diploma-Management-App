@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+	<title>Professor Information</title>
+</head>
+
+<body>
+	
+	<div class="container">
+
+		<hr>
+
+		<p class="h4 mb-4">Update Information </p>
+	
+		<form th:action="@{/professor/save_details}"
+						 th:object="${professor}" method="POST">
+
+			<input type="hidden" th:field="*{pId}" />
+
+			<label>First name:</label><br>
+			<input type="text" th:field="*{firstName}"
+					class="form-control mb-4 col-4" placeholder="First name">
+
+			<label>Last name:</label><br>
+			<input type="text" th:field="*{lastName}"
+					class="form-control mb-4 col-4" placeholder="Last name">
+
+			<label>E-mail:</label><br>
+			<input type="text" th:field="*{email}"
+					class="form-control mb-4 col-4" placeholder="Email">
+				
+			<button type="submit" class="btn btn-info col-2">Save</button>
+						
+		</form>
+	
+		<hr>
+		<a th:href="@{/professor/dashboard}">Back to Dashboard</a>-->
+		
+	</div>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+

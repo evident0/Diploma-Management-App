@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+  <title>Update Grade</title>
+</head>
+
+<body>
+
+<div class="container">
+
+  <hr>
+
+  <p class="h4 mb-4">Update Thesis Grade </p>
+
+  <form th:action="@{/professor/save-grade}" method="POST">
+
+    <input type="hidden" name="thesisId" th:value="*{thesisId}" />
+
+    <label>Implementation Grade:</label><br>
+    <input type="number" name="gradeI" min="0" max="10" step="0.01" value="0">
+    <br>
+
+    <label>Report Grade:</label><br>
+    <input type="number" name="gradeR" min="0" max="10" step="0.01" value="0">
+    <br>
+
+    <label>Presentation Grade:</label><br>
+    <input type="number" name="gradeP" min="0" max="10" step="0.01" value="0">
+    <br>
+
+    <button type="submit" class="btn btn-info col-2">Save</button>
+
+  </form>
+
+  <hr>
+  <br>
+  <a th:href="@{/professor/dashboard}">Back to Dashboard</a>
+
+</div>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+

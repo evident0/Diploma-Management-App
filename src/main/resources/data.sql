@@ -24,8 +24,6 @@ INSERT INTO thesis VALUES
 --                            (5,'thesis5','Vdhega',1,1,1);
 
 
-
-
 INSERT INTO application VALUES (1,1);
 
 

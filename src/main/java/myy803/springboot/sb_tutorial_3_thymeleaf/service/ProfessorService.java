@@ -32,7 +32,7 @@ public interface ProfessorService {
 
 	public Thesis findThesisById(int t_Id);
 
-	public void assignThesis(Student student, Subject subject);
+	public int assignThesis(Student student, Subject subject);
 
 	public float calculateGrade(float gradeI, float gradeR, float gradeP);
 

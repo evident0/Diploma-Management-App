@@ -2,10 +2,7 @@ package myy803.springboot.sb_tutorial_3_thymeleaf.service;
 
 import java.util.List;
 
-import myy803.springboot.sb_tutorial_3_thymeleaf.entity.Application;
-import myy803.springboot.sb_tutorial_3_thymeleaf.entity.Professor;
-import myy803.springboot.sb_tutorial_3_thymeleaf.entity.Student;
-import myy803.springboot.sb_tutorial_3_thymeleaf.entity.Subject;
+import myy803.springboot.sb_tutorial_3_thymeleaf.entity.*;
 
 
 public interface StudentService {
@@ -25,4 +22,6 @@ public interface StudentService {
     public List<Application> listStudentSubjects(int studentId);
 
     public List<Subject> getAvailableSubjects();
+
+    public Thesis getThesis(Student student);
 }

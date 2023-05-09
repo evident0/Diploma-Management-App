@@ -35,6 +35,26 @@
         <a th:href="@{/user/available-subjects}" class="btn btn-primary btn-sm mb-3">Available Subjects</a>
     </div>
 
+    <h3>My assigned thesis</h3>
+    <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Grade</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="thesis : ${thesisList}">
+
+            <td th:text="${thesis.title}" />
+            <td th:text="${thesis.description}" />
+            <td th:text="${thesis.getGrade()}"></td>
+        </tr>
+        </tbody>
+    </table>
+
     <br> <br> <hr> <br> <br>
 
     <p>

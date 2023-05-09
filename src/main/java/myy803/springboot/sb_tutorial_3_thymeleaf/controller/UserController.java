@@ -9,6 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 public class UserController {
 
@@ -31,6 +34,12 @@ public class UserController {
         Student student = user.getStudent();
         theModel.addAttribute("student", student);
         theModel.addAttribute("subjectList", studentService.getAvailableSubjects());
+        List<Thesis> thesisList = new ArrayList<Thesis>();
+        Thesis thesis = studentService.getThesis(student);
+        if(thesis != null){
+            thesisList.add(thesis);
+        }
+        theModel.addAttribute("thesisList", thesisList);
 
 
         return "user/dashboard";

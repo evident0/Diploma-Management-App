@@ -9,17 +9,17 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 
-	<title>Save Employee</title>
+	<title>Update Information</title>
 </head>
 
 <body>
 	
 	<div class="container">
 	
-		<h3>Employee Directory</h3>
+		<h3>Student Information</h3>
 		<hr>
 		
-		<p class="h4 mb-4">Save Employee </p>
+		<p class="h4 mb-4">Save Student </p>
 	
 		<form th:action="@{/user/save_details}"
 						 th:object="${student}" method="POST">
@@ -35,6 +35,12 @@
 
 			<input type="text" th:field="*{email}"
 					class="form-control mb-4 col-4" placeholder="Email">
+
+			<input type="number" th:field="*{averageGrade}"
+				   class="form-control mb-4 col-4" placeholder="Email" min="0" max="10" step="0.01" value="0">
+
+			<input type="number" th:field="*{remainingCourses}"
+				   class="form-control mb-4 col-4" placeholder="Email" min="0" max="100" step="1" value="0">
 				
 			<button type="submit" class="btn btn-info col-2">Save</button>
 						

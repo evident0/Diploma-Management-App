@@ -17,6 +17,10 @@ public class AdminController {
 
     private ProfessorService professorService;
 
+    private int state = 0;
+
+    private String message = "";
+
     @Autowired
     public AdminController(ProfessorService theProfessorService) {
         professorService = theProfessorService;
@@ -31,6 +35,10 @@ public class AdminController {
         theModel.addAttribute("professor", professor);
         theModel.addAttribute("subjectList", professor.getSubjects());
         theModel.addAttribute("thesisList", professor.getThesis());
+        if(state!=0){
+            state = 0;
+            theModel.addAttribute("successMessage", message);
+        }
         return "admin/dashboard";
     }
 
@@ -146,7 +154,16 @@ public class AdminController {
                 context.setStrategy(new RandomSelection());
                 break;
         }
-        professorService.assignThesis(context.selectApplicant(students), professorService.findSubjectById(theId));
+        int res = professorService.assignThesis(context.selectApplicant(students),
+                professorService.findSubjectById(theId));
+        state = res;
+        if(state == -1){
+            message = "Subject is taken by another student";
+        }
+        else if (state ==-2){
+            message = "No students found meeting the criteria";
+        }
+
         return "redirect:/admin/dashboard";
     }
 

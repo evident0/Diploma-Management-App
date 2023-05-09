@@ -35,21 +35,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Override
 	@Transactional
-	public void saveUser(User user) {
+	public void saveUser(User user, String firstName, String lastName, String email) {
 		String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
 
         userDAO.save(user);
 
 		if (user.getRole() == Role.PROFESSOR) {
-			Professor professor = new Professor("test","test","test");
+			Professor professor = new Professor(firstName,lastName,email);
 			professor.setUser(user);
-			System.out.println("THE ID ::::::: professor: " + professor.getPId());
 			professorDAO.save(professor);
 		}else if (user.getRole() == Role.STUDENT) {
-			Student student = new Student("test","test","test", 0,0);
+			Student student = new Student(firstName,lastName,email, 100,0);
 			student.setUser(user);
-			System.out.println("THE ID ::::::: student: " + student.getStudentId());
 			studentDAO.save(student);
 
 		}
@@ -68,6 +66,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	                        String.format("USER_NOT_FOUND", username)
 	                ));
 	}
+
+
 
 
 

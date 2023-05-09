@@ -105,4 +105,9 @@ public class StudentServiceImpl implements StudentService {
         return subjects;
     }
 
+    @Override
+    public Thesis getThesis(Student student){
+        return student.getThesis();
+    }
+
 }

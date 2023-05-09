@@ -144,28 +144,41 @@ public class ProfessorServiceImpl implements ProfessorService {
 		professorRepository.deleteById(p_Id);
 	}
 
-
+	@Override
 	public List<Thesis> findThesisByPId(int p_Id) {
 		return professorRepository.findById(p_Id).getThesis();
 	}
 
+	@Override
 	public Thesis findThesisById(int t_Id) {
 		return thesisRepository.findById(t_Id);
 	}
 
-	public void assignThesis(Student student, Subject subject){
-		if(student!=null) {
-			Thesis newTheis = new Thesis(subject, student);
-			saveThesis(newTheis);
-			ApplicationKey applicationId = new ApplicationKey(subject.getSubjectId(),student.getStudentId());
-			deleteApplicationById(applicationId);
+	@Override
+	@Transactional
+	public int assignThesis(Student student, Subject subject){
+		if(subject.getThesis()!=null){
+			System.out.println("cannot assign thesis");
+			return -1;
 		}
+		if(student==null) {
+			return -2;
+		}
+		Thesis newTheis = new Thesis(subject, student);
+		saveThesis(newTheis);
+		ApplicationKey applicationId = new ApplicationKey(subject.getSubjectId(),student.getStudentId());
+		deleteApplicationById(applicationId);
+
+		return 0;
 	}
 
+	@Override
 	public float calculateGrade(float gradeI, float gradeR, float gradeP){
 		return (float)(0.7*gradeI + 0.15*gradeR + 0.15*gradeP);
 	}
 
+	@Override
+	@Transactional
 	public void saveThesisGrade(Thesis thesis, float grade){
 		thesis.setGrade(grade);
 		thesisRepository.save(thesis);

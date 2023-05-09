@@ -77,6 +77,14 @@ public class Subject {
         return professor;
     }
 
+    public void setThesis(Thesis thesis) {
+    	this.thesis = thesis;
+    }
+
+    public Thesis getThesis() {
+    	return thesis;
+    }
+
     public void setProfessor(Professor professor) {
         this.professor = professor;
     }

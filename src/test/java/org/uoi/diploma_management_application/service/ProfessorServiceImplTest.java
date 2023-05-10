@@ -14,6 +14,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -82,12 +83,38 @@ class ProfessorServiceImplTest {
      */
     @Test
     void testFindById() {
+
+
         Professor professor = new Professor();
         professor.setEmail("jane.doe@example.org");
         professor.setFirstName("Jane");
         professor.setLastName("Doe");
         professor.setPId(1);
         professor.setUser(new User());
+        when(professorDAO.findById(1)).thenReturn(professor);
+        assertSame(professor, professorServiceImpl.findById(1));
+        verify(professorDAO).findById(anyInt());
+    }
+
+    @Test
+    void testFindByIdRuntimeException() {
+
+        Professor professor = new Professor();
+        professor.setEmail("jane.doe@example.org");
+        professor.setFirstName("Jane");
+        professor.setLastName("Doe");
+        professor.setPId(1);
+        professor.setUser(new User());
+        when(professorDAO.findById(1)).thenReturn(professor);
+        assertThrows(RuntimeException.class, () -> professorServiceImpl.findById(42));
+        verify(professorDAO).findById(anyInt());
+    }
+
+    /**
+     * Method under test: {@link ProfessorServiceImpl#findStudentsBySubjectId(int)}
+     */
+    @Test
+    void testFindStudentsBySubjectId() {
 
         Student student = new Student();
         student.setApplications(new ArrayList<>());
@@ -99,127 +126,12 @@ class ProfessorServiceImplTest {
         student.setStudentId(1);
         student.setUser(new User());
 
-        User user = new User();
-        user.setId(1);
-        user.setPassword("iloveyou");
-        user.setProfessor(professor);
-        user.setRole(Role.STUDENT);
-        user.setStudent(student);
-        user.setUsername("janedoe");
-
-        Professor professor2 = new Professor();
-        professor2.setEmail("jane.doe@example.org");
-        professor2.setFirstName("Jane");
-        professor2.setLastName("Doe");
-        professor2.setPId(1);
-        professor2.setUser(user);
-
-        Professor professor3 = new Professor();
-        professor3.setEmail("jane.doe@example.org");
-        professor3.setFirstName("Jane");
-        professor3.setLastName("Doe");
-        professor3.setPId(1);
-        professor3.setUser(new User());
-
-        Student student2 = new Student();
-        student2.setApplications(new ArrayList<>());
-        student2.setAverageGrade(10.0f);
-        student2.setEmail("jane.doe@example.org");
-        student2.setFirstName("Jane");
-        student2.setLastName("Doe");
-        student2.setRemainingCourses(1);
-        student2.setStudentId(1);
-        student2.setUser(new User());
-
-        User user2 = new User();
-        user2.setId(1);
-        user2.setPassword("iloveyou");
-        user2.setProfessor(professor3);
-        user2.setRole(Role.STUDENT);
-        user2.setStudent(student2);
-        user2.setUsername("janedoe");
-
-        Student student3 = new Student();
-        student3.setApplications(new ArrayList<>());
-        student3.setAverageGrade(10.0f);
-        student3.setEmail("jane.doe@example.org");
-        student3.setFirstName("Jane");
-        student3.setLastName("Doe");
-        student3.setRemainingCourses(1);
-        student3.setStudentId(1);
-        student3.setUser(user2);
-
-        User user3 = new User();
-        user3.setId(1);
-        user3.setPassword("iloveyou");
-        user3.setProfessor(professor2);
-        user3.setRole(Role.STUDENT);
-        user3.setStudent(student3);
-        user3.setUsername("janedoe");
-
-        Professor professor4 = new Professor();
-        professor4.setEmail("jane.doe@example.org");
-        professor4.setFirstName("Jane");
-        professor4.setLastName("Doe");
-        professor4.setPId(1);
-        professor4.setUser(user3);
-        when(professorDAO.findById(anyInt())).thenReturn(professor4);
-        assertSame(professor4, professorServiceImpl.findById(1));
-        verify(professorDAO).findById(anyInt());
-    }
-
-    /**
-     * Method under test: {@link ProfessorServiceImpl#findStudentsBySubjectId(int)}
-     */
-    @Test
-    void testFindStudentsBySubjectId() {
-        User user = new User();
-        user.setId(1);
-        user.setPassword("iloveyou");
-        user.setProfessor(new Professor());
-        user.setRole(Role.STUDENT);
-        user.setStudent(new Student());
-        user.setUsername("janedoe");
-
         Professor professor = new Professor();
         professor.setEmail("jane.doe@example.org");
         professor.setFirstName("Jane");
         professor.setLastName("Doe");
         professor.setPId(1);
-        professor.setUser(user);
-
-        User user2 = new User();
-        user2.setId(1);
-        user2.setPassword("iloveyou");
-        user2.setProfessor(new Professor());
-        user2.setRole(Role.STUDENT);
-        user2.setStudent(new Student());
-        user2.setUsername("janedoe");
-
-        Student student = new Student();
-        student.setApplications(new ArrayList<>());
-        student.setAverageGrade(10.0f);
-        student.setEmail("jane.doe@example.org");
-        student.setFirstName("Jane");
-        student.setLastName("Doe");
-        student.setRemainingCourses(1);
-        student.setStudentId(1);
-        student.setUser(user2);
-
-        User user3 = new User();
-        user3.setId(1);
-        user3.setPassword("iloveyou");
-        user3.setProfessor(professor);
-        user3.setRole(Role.STUDENT);
-        user3.setStudent(student);
-        user3.setUsername("janedoe");
-
-        Professor professor2 = new Professor();
-        professor2.setEmail("jane.doe@example.org");
-        professor2.setFirstName("Jane");
-        professor2.setLastName("Doe");
-        professor2.setPId(1);
-        professor2.setUser(user3);
+        professor.setUser(new User());
 
         Thesis thesis = new Thesis();
         thesis.setDescription("The characteristics of someone or something");
@@ -227,14 +139,23 @@ class ProfessorServiceImplTest {
         thesis.setTId(1);
         thesis.setTitle("Dr");
 
+        List<Application> applications = new ArrayList<>();
+
         Subject subject = new Subject();
+
+        Application application = new Application(1,1, student, subject);
+
+        applications.add(application);
+
         subject.setDescription("The characteristics of someone or something");
-        subject.setProfessor(professor2);
+        subject.setProfessor(professor);
         subject.setSubjectId(1);
         subject.setThesis(thesis);
+        subject.setApplications(applications);
         subject.setTitle("Dr");
-        when(subjectDAO.findById(anyInt())).thenReturn(subject);
-        assertTrue(professorServiceImpl.findStudentsBySubjectId(1).isEmpty());
+
+        when(subjectDAO.findById(1)).thenReturn(subject);
+        assertEquals(Arrays.asList(student), professorServiceImpl.findStudentsBySubjectId(1));
         verify(subjectDAO).findById(anyInt());
     }
 
@@ -243,65 +164,12 @@ class ProfessorServiceImplTest {
      */
     @Test
     void testFindSubjectById() {
-        User user = new User();
-        user.setId(1);
-        user.setPassword("iloveyou");
-        user.setProfessor(new Professor());
-        user.setRole(Role.STUDENT);
-        user.setStudent(new Student());
-        user.setUsername("janedoe");
-
-        Professor professor = new Professor();
-        professor.setEmail("jane.doe@example.org");
-        professor.setFirstName("Jane");
-        professor.setLastName("Doe");
-        professor.setPId(1);
-        professor.setUser(user);
-
-        User user2 = new User();
-        user2.setId(1);
-        user2.setPassword("iloveyou");
-        user2.setProfessor(new Professor());
-        user2.setRole(Role.STUDENT);
-        user2.setStudent(new Student());
-        user2.setUsername("janedoe");
-
-        Student student = new Student();
-        student.setApplications(new ArrayList<>());
-        student.setAverageGrade(10.0f);
-        student.setEmail("jane.doe@example.org");
-        student.setFirstName("Jane");
-        student.setLastName("Doe");
-        student.setRemainingCourses(1);
-        student.setStudentId(1);
-        student.setUser(user2);
-
-        User user3 = new User();
-        user3.setId(1);
-        user3.setPassword("iloveyou");
-        user3.setProfessor(professor);
-        user3.setRole(Role.STUDENT);
-        user3.setStudent(student);
-        user3.setUsername("janedoe");
-
-        Professor professor2 = new Professor();
-        professor2.setEmail("jane.doe@example.org");
-        professor2.setFirstName("Jane");
-        professor2.setLastName("Doe");
-        professor2.setPId(1);
-        professor2.setUser(user3);
-
-        Thesis thesis = new Thesis();
-        thesis.setDescription("The characteristics of someone or something");
-        thesis.setGrade(10.0f);
-        thesis.setTId(1);
-        thesis.setTitle("Dr");
 
         Subject subject = new Subject();
         subject.setDescription("The characteristics of someone or something");
-        subject.setProfessor(professor2);
+        subject.setProfessor(new Professor());
         subject.setSubjectId(1);
-        subject.setThesis(thesis);
+        subject.setThesis(new Thesis());
         subject.setTitle("Dr");
         when(subjectDAO.findById(anyInt())).thenReturn(subject);
         assertSame(subject, professorServiceImpl.findSubjectById(1));
@@ -313,87 +181,12 @@ class ProfessorServiceImplTest {
      */
     @Test
     void testFindByFirstName() {
-        Professor professor = new Professor();
-        professor.setEmail("jane.doe@example.org");
-        professor.setFirstName("Jane");
-        professor.setLastName("Doe");
-        professor.setPId(1);
-        professor.setUser(new User());
-
-        Student student = new Student();
-        student.setApplications(new ArrayList<>());
-        student.setAverageGrade(10.0f);
-        student.setEmail("jane.doe@example.org");
-        student.setFirstName("Jane");
-        student.setLastName("Doe");
-        student.setRemainingCourses(1);
-        student.setStudentId(1);
-        student.setUser(new User());
-
-        User user = new User();
-        user.setId(1);
-        user.setPassword("iloveyou");
-        user.setProfessor(professor);
-        user.setRole(Role.STUDENT);
-        user.setStudent(student);
-        user.setUsername("janedoe");
-
-        Professor professor2 = new Professor();
-        professor2.setEmail("jane.doe@example.org");
-        professor2.setFirstName("Jane");
-        professor2.setLastName("Doe");
-        professor2.setPId(1);
-        professor2.setUser(user);
-
-        Professor professor3 = new Professor();
-        professor3.setEmail("jane.doe@example.org");
-        professor3.setFirstName("Jane");
-        professor3.setLastName("Doe");
-        professor3.setPId(1);
-        professor3.setUser(new User());
-
-        Student student2 = new Student();
-        student2.setApplications(new ArrayList<>());
-        student2.setAverageGrade(10.0f);
-        student2.setEmail("jane.doe@example.org");
-        student2.setFirstName("Jane");
-        student2.setLastName("Doe");
-        student2.setRemainingCourses(1);
-        student2.setStudentId(1);
-        student2.setUser(new User());
-
-        User user2 = new User();
-        user2.setId(1);
-        user2.setPassword("iloveyou");
-        user2.setProfessor(professor3);
-        user2.setRole(Role.STUDENT);
-        user2.setStudent(student2);
-        user2.setUsername("janedoe");
-
-        Student student3 = new Student();
-        student3.setApplications(new ArrayList<>());
-        student3.setAverageGrade(10.0f);
-        student3.setEmail("jane.doe@example.org");
-        student3.setFirstName("Jane");
-        student3.setLastName("Doe");
-        student3.setRemainingCourses(1);
-        student3.setStudentId(1);
-        student3.setUser(user2);
-
-        User user3 = new User();
-        user3.setId(1);
-        user3.setPassword("iloveyou");
-        user3.setProfessor(professor2);
-        user3.setRole(Role.STUDENT);
-        user3.setStudent(student3);
-        user3.setUsername("janedoe");
-
         Professor professor4 = new Professor();
         professor4.setEmail("jane.doe@example.org");
         professor4.setFirstName("Jane");
         professor4.setLastName("Doe");
         professor4.setPId(1);
-        professor4.setUser(user3);
+        professor4.setUser(new User());
         when(professorDAO.findByFirstName(Mockito.<String>any())).thenReturn(professor4);
         assertSame(professor4, professorServiceImpl.findByFirstName("Jane"));
         verify(professorDAO).findByFirstName(Mockito.<String>any());
@@ -404,146 +197,16 @@ class ProfessorServiceImplTest {
      */
     @Test
     void testSave() {
-        Professor professor = new Professor();
-        professor.setEmail("jane.doe@example.org");
-        professor.setFirstName("Jane");
-        professor.setLastName("Doe");
-        professor.setPId(1);
-        professor.setUser(new User());
-
-        Student student = new Student();
-        student.setApplications(new ArrayList<>());
-        student.setAverageGrade(10.0f);
-        student.setEmail("jane.doe@example.org");
-        student.setFirstName("Jane");
-        student.setLastName("Doe");
-        student.setRemainingCourses(1);
-        student.setStudentId(1);
-        student.setUser(new User());
-
-        User user = new User();
-        user.setId(1);
-        user.setPassword("iloveyou");
-        user.setProfessor(professor);
-        user.setRole(Role.STUDENT);
-        user.setStudent(student);
-        user.setUsername("janedoe");
-
-        Professor professor2 = new Professor();
-        professor2.setEmail("jane.doe@example.org");
-        professor2.setFirstName("Jane");
-        professor2.setLastName("Doe");
-        professor2.setPId(1);
-        professor2.setUser(user);
-
-        Professor professor3 = new Professor();
-        professor3.setEmail("jane.doe@example.org");
-        professor3.setFirstName("Jane");
-        professor3.setLastName("Doe");
-        professor3.setPId(1);
-        professor3.setUser(new User());
-
-        Student student2 = new Student();
-        student2.setApplications(new ArrayList<>());
-        student2.setAverageGrade(10.0f);
-        student2.setEmail("jane.doe@example.org");
-        student2.setFirstName("Jane");
-        student2.setLastName("Doe");
-        student2.setRemainingCourses(1);
-        student2.setStudentId(1);
-        student2.setUser(new User());
-
-        User user2 = new User();
-        user2.setId(1);
-        user2.setPassword("iloveyou");
-        user2.setProfessor(professor3);
-        user2.setRole(Role.STUDENT);
-        user2.setStudent(student2);
-        user2.setUsername("janedoe");
-
-        Student student3 = new Student();
-        student3.setApplications(new ArrayList<>());
-        student3.setAverageGrade(10.0f);
-        student3.setEmail("jane.doe@example.org");
-        student3.setFirstName("Jane");
-        student3.setLastName("Doe");
-        student3.setRemainingCourses(1);
-        student3.setStudentId(1);
-        student3.setUser(user2);
-
-        User user3 = new User();
-        user3.setId(1);
-        user3.setPassword("iloveyou");
-        user3.setProfessor(professor2);
-        user3.setRole(Role.STUDENT);
-        user3.setStudent(student3);
-        user3.setUsername("janedoe");
-
-        Professor professor4 = new Professor();
-        professor4.setEmail("jane.doe@example.org");
-        professor4.setFirstName("Jane");
-        professor4.setLastName("Doe");
-        professor4.setPId(1);
-        professor4.setUser(user3);
-        when(professorDAO.save(Mockito.<Professor>any())).thenReturn(professor4);
-
-        User user4 = new User();
-        user4.setId(1);
-        user4.setPassword("iloveyou");
-        user4.setProfessor(new Professor());
-        user4.setRole(Role.STUDENT);
-        user4.setStudent(new Student());
-        user4.setUsername("janedoe");
-
-        Professor professor5 = new Professor();
-        professor5.setEmail("jane.doe@example.org");
-        professor5.setFirstName("Jane");
-        professor5.setLastName("Doe");
-        professor5.setPId(1);
-        professor5.setUser(user4);
-
-        User user5 = new User();
-        user5.setId(1);
-        user5.setPassword("iloveyou");
-        user5.setProfessor(new Professor());
-        user5.setRole(Role.STUDENT);
-        user5.setStudent(new Student());
-        user5.setUsername("janedoe");
-
-        Student student4 = new Student();
-        ArrayList<Application> applications = new ArrayList<>();
-        student4.setApplications(applications);
-        student4.setAverageGrade(10.0f);
-        student4.setEmail("jane.doe@example.org");
-        student4.setFirstName("Jane");
-        student4.setLastName("Doe");
-        student4.setRemainingCourses(1);
-        student4.setStudentId(1);
-        student4.setUser(user5);
-
-        User user6 = new User();
-        user6.setId(1);
-        user6.setPassword("iloveyou");
-        user6.setProfessor(professor5);
-        user6.setRole(Role.STUDENT);
-        user6.setStudent(student4);
-        user6.setUsername("janedoe");
 
         Professor theProfessor = new Professor();
         theProfessor.setEmail("jane.doe@example.org");
         theProfessor.setFirstName("Jane");
         theProfessor.setLastName("Doe");
         theProfessor.setPId(1);
-        theProfessor.setUser(user6);
+        theProfessor.setUser(new User());
         professorServiceImpl.save(theProfessor);
-        verify(professorDAO).save(Mockito.<Professor>any());
-        assertEquals("jane.doe@example.org", theProfessor.getEmail());
-        assertSame(user6, theProfessor.getUser());
-        assertEquals(applications, theProfessor.getThesis());
-        assertEquals("Jane", theProfessor.getFirstName());
-        assertEquals(1, theProfessor.getPId());
-        assertEquals(applications, theProfessor.getSubjects());
-        assertEquals("Doe", theProfessor.getLastName());
+        verify(professorDAO).save(theProfessor);
+
     }
 
     /**
@@ -593,77 +256,10 @@ class ProfessorServiceImplTest {
      */
     @Test
     void testSaveSubject() {
-        User user = new User();
-        user.setId(1);
-        user.setPassword("iloveyou");
-        user.setProfessor(new Professor());
-        user.setRole(Role.STUDENT);
-        user.setStudent(new Student());
-        user.setUsername("janedoe");
-
-        Professor professor = new Professor();
-        professor.setEmail("jane.doe@example.org");
-        professor.setFirstName("Jane");
-        professor.setLastName("Doe");
-        professor.setPId(1);
-        professor.setUser(user);
-
-        User user2 = new User();
-        user2.setId(1);
-        user2.setPassword("iloveyou");
-        user2.setProfessor(new Professor());
-        user2.setRole(Role.STUDENT);
-        user2.setStudent(new Student());
-        user2.setUsername("janedoe");
-
-        Student student = new Student();
-        student.setApplications(new ArrayList<>());
-        student.setAverageGrade(10.0f);
-        student.setEmail("jane.doe@example.org");
-        student.setFirstName("Jane");
-        student.setLastName("Doe");
-        student.setRemainingCourses(1);
-        student.setStudentId(1);
-        student.setUser(user2);
-
-        User user3 = new User();
-        user3.setId(1);
-        user3.setPassword("iloveyou");
-        user3.setProfessor(professor);
-        user3.setRole(Role.STUDENT);
-        user3.setStudent(student);
-        user3.setUsername("janedoe");
-
-        Professor professor2 = new Professor();
-        professor2.setEmail("jane.doe@example.org");
-        professor2.setFirstName("Jane");
-        professor2.setLastName("Doe");
-        professor2.setPId(1);
-        professor2.setUser(user3);
-
-        Thesis thesis = new Thesis();
-        thesis.setDescription("The characteristics of someone or something");
-        thesis.setGrade(10.0f);
-        thesis.setTId(1);
-        thesis.setTitle("Dr");
-
-        Subject subject = new Subject();
-        subject.setDescription("The characteristics of someone or something");
-        subject.setProfessor(professor2);
-        subject.setSubjectId(1);
-        subject.setThesis(thesis);
-        subject.setTitle("Dr");
-        when(subjectDAO.save(Mockito.<Subject>any())).thenReturn(subject);
-
-        Professor professor3 = new Professor();
-        professor3.setEmail("jane.doe@example.org");
-        professor3.setFirstName("Jane");
-        professor3.setLastName("Doe");
-        professor3.setPId(1);
-        professor3.setUser(new User());
 
         Student student2 = new Student();
         ArrayList<Application> applications = new ArrayList<>();
+
         student2.setApplications(applications);
         student2.setAverageGrade(10.0f);
         student2.setEmail("jane.doe@example.org");
@@ -673,20 +269,12 @@ class ProfessorServiceImplTest {
         student2.setStudentId(1);
         student2.setUser(new User());
 
-        User user4 = new User();
-        user4.setId(1);
-        user4.setPassword("iloveyou");
-        user4.setProfessor(professor3);
-        user4.setRole(Role.STUDENT);
-        user4.setStudent(student2);
-        user4.setUsername("janedoe");
-
         Professor professor4 = new Professor();
         professor4.setEmail("jane.doe@example.org");
         professor4.setFirstName("Jane");
         professor4.setLastName("Doe");
         professor4.setPId(1);
-        professor4.setUser(user4);
+        professor4.setUser(new User());
 
         Thesis thesis2 = new Thesis();
         thesis2.setDescription("The characteristics of someone or something");
@@ -695,19 +283,21 @@ class ProfessorServiceImplTest {
         thesis2.setTitle("Dr");
 
         Subject theSubject = new Subject();
+
+        Application application = new Application(1,1, student2, theSubject);
+
+        applications.add(application);
+
+        theSubject.setApplications(applications);
+
         theSubject.setDescription("The characteristics of someone or something");
         theSubject.setProfessor(professor4);
         theSubject.setSubjectId(1);
         theSubject.setThesis(thesis2);
         theSubject.setTitle("Dr");
         professorServiceImpl.saveSubject(theSubject);
-        verify(subjectDAO).save(Mockito.<Subject>any());
-        assertEquals(applications, theSubject.getApplications());
-        assertEquals("Dr", theSubject.getTitle());
-        assertSame(thesis2, theSubject.getThesis());
-        assertEquals(1, theSubject.getSubjectId());
-        assertEquals("The characteristics of someone or something", theSubject.getDescription());
-        assertSame(professor4, theSubject.getProfessor());
+        verify(subjectDAO).save(theSubject);
+
     }
 
     /**
@@ -778,88 +368,13 @@ class ProfessorServiceImplTest {
      */
     @Test
     void testFindThesisByPId() {
-        Professor professor = new Professor();
-        professor.setEmail("jane.doe@example.org");
-        professor.setFirstName("Jane");
-        professor.setLastName("Doe");
-        professor.setPId(1);
-        professor.setUser(new User());
-
-        Student student = new Student();
-        student.setApplications(new ArrayList<>());
-        student.setAverageGrade(10.0f);
-        student.setEmail("jane.doe@example.org");
-        student.setFirstName("Jane");
-        student.setLastName("Doe");
-        student.setRemainingCourses(1);
-        student.setStudentId(1);
-        student.setUser(new User());
-
-        User user = new User();
-        user.setId(1);
-        user.setPassword("iloveyou");
-        user.setProfessor(professor);
-        user.setRole(Role.STUDENT);
-        user.setStudent(student);
-        user.setUsername("janedoe");
-
-        Professor professor2 = new Professor();
-        professor2.setEmail("jane.doe@example.org");
-        professor2.setFirstName("Jane");
-        professor2.setLastName("Doe");
-        professor2.setPId(1);
-        professor2.setUser(user);
-
-        Professor professor3 = new Professor();
-        professor3.setEmail("jane.doe@example.org");
-        professor3.setFirstName("Jane");
-        professor3.setLastName("Doe");
-        professor3.setPId(1);
-        professor3.setUser(new User());
-
-        Student student2 = new Student();
-        student2.setApplications(new ArrayList<>());
-        student2.setAverageGrade(10.0f);
-        student2.setEmail("jane.doe@example.org");
-        student2.setFirstName("Jane");
-        student2.setLastName("Doe");
-        student2.setRemainingCourses(1);
-        student2.setStudentId(1);
-        student2.setUser(new User());
-
-        User user2 = new User();
-        user2.setId(1);
-        user2.setPassword("iloveyou");
-        user2.setProfessor(professor3);
-        user2.setRole(Role.STUDENT);
-        user2.setStudent(student2);
-        user2.setUsername("janedoe");
-
-        Student student3 = new Student();
-        student3.setApplications(new ArrayList<>());
-        student3.setAverageGrade(10.0f);
-        student3.setEmail("jane.doe@example.org");
-        student3.setFirstName("Jane");
-        student3.setLastName("Doe");
-        student3.setRemainingCourses(1);
-        student3.setStudentId(1);
-        student3.setUser(user2);
-
-        User user3 = new User();
-        user3.setId(1);
-        user3.setPassword("iloveyou");
-        user3.setProfessor(professor2);
-        user3.setRole(Role.STUDENT);
-        user3.setStudent(student3);
-        user3.setUsername("janedoe");
-
         Professor professor4 = new Professor();
         professor4.setEmail("jane.doe@example.org");
         professor4.setFirstName("Jane");
         professor4.setLastName("Doe");
         professor4.setPId(1);
-        professor4.setUser(user3);
-        when(professorDAO.findById(anyInt())).thenReturn(professor4);
+        professor4.setUser(new User());
+        when(professorDAO.findById(1)).thenReturn(professor4);
         assertTrue(professorServiceImpl.findThesisByPId(1).isEmpty());
         verify(professorDAO).findById(anyInt());
     }
@@ -894,28 +409,21 @@ class ProfessorServiceImplTest {
      */
     @Test
     void testAssignThesis() {
-        User user = new User();
-        user.setId(1);
-        user.setPassword("iloveyou");
-        user.setProfessor(new Professor());
-        user.setRole(Role.STUDENT);
-        user.setStudent(new Student());
-        user.setUsername("janedoe");
+
 
         Professor professor = new Professor();
         professor.setEmail("jane.doe@example.org");
         professor.setFirstName("Jane");
         professor.setLastName("Doe");
         professor.setPId(1);
-        professor.setUser(user);
+        professor.setUser(new User());
 
-        User user2 = new User();
-        user2.setId(1);
-        user2.setPassword("iloveyou");
-        user2.setProfessor(new Professor());
-        user2.setRole(Role.STUDENT);
-        user2.setStudent(new Student());
-        user2.setUsername("janedoe");
+        Subject subject = new Subject();
+        subject.setDescription("The characteristics of someone or something");
+        subject.setProfessor(professor);
+        subject.setSubjectId(1);
+        subject.setThesis(null);
+        subject.setTitle("Dr");
 
         Student student = new Student();
         student.setApplications(new ArrayList<>());
@@ -925,189 +433,9 @@ class ProfessorServiceImplTest {
         student.setLastName("Doe");
         student.setRemainingCourses(1);
         student.setStudentId(1);
-        student.setUser(user2);
+        student.setUser(new User());
 
-        User user3 = new User();
-        user3.setId(1);
-        user3.setPassword("iloveyou");
-        user3.setProfessor(professor);
-        user3.setRole(Role.STUDENT);
-        user3.setStudent(student);
-        user3.setUsername("janedoe");
-
-        Student student2 = new Student();
-        student2.setApplications(new ArrayList<>());
-        student2.setAverageGrade(10.0f);
-        student2.setEmail("jane.doe@example.org");
-        student2.setFirstName("Jane");
-        student2.setLastName("Doe");
-        student2.setRemainingCourses(1);
-        student2.setStudentId(1);
-        student2.setUser(user3);
-
-        Professor professor2 = new Professor();
-        professor2.setEmail("jane.doe@example.org");
-        professor2.setFirstName("Jane");
-        professor2.setLastName("Doe");
-        professor2.setPId(1);
-        professor2.setUser(new User());
-
-        Student student3 = new Student();
-        student3.setApplications(new ArrayList<>());
-        student3.setAverageGrade(10.0f);
-        student3.setEmail("jane.doe@example.org");
-        student3.setFirstName("Jane");
-        student3.setLastName("Doe");
-        student3.setRemainingCourses(1);
-        student3.setStudentId(1);
-        student3.setUser(new User());
-
-        User user4 = new User();
-        user4.setId(1);
-        user4.setPassword("iloveyou");
-        user4.setProfessor(professor2);
-        user4.setRole(Role.STUDENT);
-        user4.setStudent(student3);
-        user4.setUsername("janedoe");
-
-        Professor professor3 = new Professor();
-        professor3.setEmail("jane.doe@example.org");
-        professor3.setFirstName("Jane");
-        professor3.setLastName("Doe");
-        professor3.setPId(1);
-        professor3.setUser(user4);
-
-        Thesis thesis = new Thesis();
-        thesis.setDescription("The characteristics of someone or something");
-        thesis.setGrade(10.0f);
-        thesis.setTId(1);
-        thesis.setTitle("Dr");
-
-        Subject subject = new Subject();
-        subject.setDescription("The characteristics of someone or something");
-        subject.setProfessor(professor3);
-        subject.setSubjectId(1);
-        subject.setThesis(thesis);
-        subject.setTitle("Dr");
-        assertEquals(-1, professorServiceImpl.assignThesis(student2, subject));
-    }
-
-    /**
-     * Method under test: {@link ProfessorServiceImpl#assignThesis(Student, Subject)}
-     */
-    @Test
-    void testAssignThesis2() {
-        User user = new User();
-        user.setId(1);
-        user.setPassword("iloveyou");
-        user.setProfessor(new Professor());
-        user.setRole(Role.STUDENT);
-        user.setStudent(new Student());
-        user.setUsername("janedoe");
-
-        Professor professor = new Professor();
-        professor.setEmail("jane.doe@example.org");
-        professor.setFirstName("Jane");
-        professor.setLastName("Doe");
-        professor.setPId(1);
-        professor.setUser(user);
-
-        User user2 = new User();
-        user2.setId(1);
-        user2.setPassword("iloveyou");
-        user2.setProfessor(new Professor());
-        user2.setRole(Role.STUDENT);
-        user2.setStudent(new Student());
-        user2.setUsername("janedoe");
-
-        Student student = new Student();
-        student.setApplications(new ArrayList<>());
-        student.setAverageGrade(10.0f);
-        student.setEmail("jane.doe@example.org");
-        student.setFirstName("Jane");
-        student.setLastName("Doe");
-        student.setRemainingCourses(1);
-        student.setStudentId(1);
-        student.setUser(user2);
-
-        User user3 = new User();
-        user3.setId(1);
-        user3.setPassword("iloveyou");
-        user3.setProfessor(professor);
-        user3.setRole(Role.STUDENT);
-        user3.setStudent(student);
-        user3.setUsername("janedoe");
-        Student student2 = mock(Student.class);
-        doNothing().when(student2).setApplications(Mockito.<List<Application>>any());
-        doNothing().when(student2).setAverageGrade(anyFloat());
-        doNothing().when(student2).setEmail(Mockito.<String>any());
-        doNothing().when(student2).setFirstName(Mockito.<String>any());
-        doNothing().when(student2).setLastName(Mockito.<String>any());
-        doNothing().when(student2).setRemainingCourses(anyInt());
-        doNothing().when(student2).setStudentId(anyInt());
-        doNothing().when(student2).setUser(Mockito.<User>any());
-        student2.setApplications(new ArrayList<>());
-        student2.setAverageGrade(10.0f);
-        student2.setEmail("jane.doe@example.org");
-        student2.setFirstName("Jane");
-        student2.setLastName("Doe");
-        student2.setRemainingCourses(1);
-        student2.setStudentId(1);
-        student2.setUser(user3);
-
-        Professor professor2 = new Professor();
-        professor2.setEmail("jane.doe@example.org");
-        professor2.setFirstName("Jane");
-        professor2.setLastName("Doe");
-        professor2.setPId(1);
-        professor2.setUser(new User());
-
-        Student student3 = new Student();
-        student3.setApplications(new ArrayList<>());
-        student3.setAverageGrade(10.0f);
-        student3.setEmail("jane.doe@example.org");
-        student3.setFirstName("Jane");
-        student3.setLastName("Doe");
-        student3.setRemainingCourses(1);
-        student3.setStudentId(1);
-        student3.setUser(new User());
-
-        User user4 = new User();
-        user4.setId(1);
-        user4.setPassword("iloveyou");
-        user4.setProfessor(professor2);
-        user4.setRole(Role.STUDENT);
-        user4.setStudent(student3);
-        user4.setUsername("janedoe");
-
-        Professor professor3 = new Professor();
-        professor3.setEmail("jane.doe@example.org");
-        professor3.setFirstName("Jane");
-        professor3.setLastName("Doe");
-        professor3.setPId(1);
-        professor3.setUser(user4);
-
-        Thesis thesis = new Thesis();
-        thesis.setDescription("The characteristics of someone or something");
-        thesis.setGrade(10.0f);
-        thesis.setTId(1);
-        thesis.setTitle("Dr");
-
-        Subject subject = new Subject();
-        subject.setDescription("The characteristics of someone or something");
-        subject.setProfessor(professor3);
-        subject.setSubjectId(1);
-        subject.setThesis(thesis);
-        subject.setTitle("Dr");
-        assertEquals(-1, professorServiceImpl.assignThesis(student2, subject));
-        verify(student2).setApplications(Mockito.<List<Application>>any());
-        verify(student2).setAverageGrade(anyFloat());
-        verify(student2).setEmail(Mockito.<String>any());
-        verify(student2).setFirstName(Mockito.<String>any());
-        verify(student2).setLastName(Mockito.<String>any());
-        verify(student2).setRemainingCourses(anyInt());
-        verify(student2).setStudentId(anyInt());
-        verify(student2).setUser(Mockito.<User>any());
+        assertEquals(0, professorServiceImpl.assignThesis(student, subject));
     }
 
     /**
@@ -1131,7 +459,6 @@ class ProfessorServiceImplTest {
         thesis.setGrade(10.0f);
         thesis.setTId(1);
         thesis.setTitle("Dr");
-        when(thesisDAO.save(Mockito.<Thesis>any())).thenReturn(thesis);
 
         Thesis thesis2 = new Thesis();
         thesis2.setDescription("The characteristics of someone or something");
@@ -1148,17 +475,8 @@ class ProfessorServiceImplTest {
      */
     @Test
     void testSaveThesisGrade2() {
-        Thesis thesis = new Thesis();
-        thesis.setDescription("The characteristics of someone or something");
-        thesis.setGrade(10.0f);
-        thesis.setTId(1);
-        thesis.setTitle("Dr");
-        when(thesisDAO.save(Mockito.<Thesis>any())).thenReturn(thesis);
         Thesis thesis2 = mock(Thesis.class);
-        doNothing().when(thesis2).setDescription(Mockito.<String>any());
-        doNothing().when(thesis2).setGrade(anyFloat());
-        doNothing().when(thesis2).setTId(anyInt());
-        doNothing().when(thesis2).setTitle(Mockito.<String>any());
+
         thesis2.setDescription("The characteristics of someone or something");
         thesis2.setGrade(10.0f);
         thesis2.setTId(1);

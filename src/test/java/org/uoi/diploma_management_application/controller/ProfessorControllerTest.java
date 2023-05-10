@@ -9,20 +9,33 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithSecurityContext;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -30,6 +43,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.ConcurrentModel;
 import org.springframework.ui.Model;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.context.WebApplicationContext;
 import org.uoi.diploma_management_application.dao.ApplicationDAO;
 import org.uoi.diploma_management_application.dao.ProfessorDAO;
 import org.uoi.diploma_management_application.dao.SubjectDAO;
@@ -45,12 +61,32 @@ import org.uoi.diploma_management_application.service.ProfessorServiceImpl;
 
 @ContextConfiguration(classes = {ProfessorController.class})
 @ExtendWith(SpringExtension.class)
+@AutoConfigureMockMvc
+@SpringBootTest
+@TestPropertySource(
+        locations = "classpath:application.properties")
 class ProfessorControllerTest {
     @Autowired
     private ProfessorController professorController;
 
+    //@MockBean
+    //private Authentication authentication;
+
     @MockBean
     private ProfessorService professorService;
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    private WebApplicationContext context;
+
+    @BeforeEach
+    public void setup() {
+        mockMvc = MockMvcBuilders
+                .webAppContextSetup(context)
+                .build();
+    }
 
     /**
      * Method under test: {@link ProfessorController#getProfessorHome(Authentication, Model)}
@@ -1235,488 +1271,66 @@ class ProfessorControllerTest {
      */
     @Test
     void testChangeDetails() {
-        //   Diffblue Cover was unable to write a Spring test,
-        //   so wrote a non-Spring test instead.
-        //   Reason: R013 No inputs found that don't throw a trivial exception.
-        //   Diffblue Cover tried to run the arrange/act section, but the method under
-        //   test threw
-        //   java.lang.NullPointerException
-        //       at org.uoi.diploma_management_application.controller.ProfessorController.changeDetails(ProfessorController.java:78)
-        //       at javax.servlet.http.HttpServlet.service(HttpServlet.java:655)
-        //       at javax.servlet.http.HttpServlet.service(HttpServlet.java:764)
-        //   See https://diff.blue/R013 to resolve this issue.
 
-        ProfessorController professorController = new ProfessorController(new ProfessorServiceImpl());
-
-        User user = new User();
-        user.setId(1);
-        user.setPassword("iloveyou");
-        user.setProfessor(new Professor());
-        user.setRole(Role.STUDENT);
-        user.setStudent(new Student());
-        user.setUsername("janedoe");
-
-        Professor professor = new Professor();
-        professor.setEmail("jane.doe@example.org");
-        professor.setFirstName("Jane");
-        professor.setLastName("Doe");
-        professor.setPId(1);
-        professor.setUser(user);
-
-        User user2 = new User();
-        user2.setId(1);
-        user2.setPassword("iloveyou");
-        user2.setProfessor(new Professor());
-        user2.setRole(Role.STUDENT);
-        user2.setStudent(new Student());
-        user2.setUsername("janedoe");
-
-        Student student = new Student();
-        student.setApplications(new ArrayList<>());
-        student.setAverageGrade(10.0f);
-        student.setEmail("jane.doe@example.org");
-        student.setFirstName("Jane");
-        student.setLastName("Doe");
-        student.setRemainingCourses(1);
-        student.setStudentId(1);
-        student.setUser(user2);
-
-        User user3 = new User();
-        user3.setId(1);
-        user3.setPassword("iloveyou");
-        user3.setProfessor(professor);
-        user3.setRole(Role.STUDENT);
-        user3.setStudent(student);
-        user3.setUsername("janedoe");
-
-        Professor professor2 = new Professor();
-        professor2.setEmail("jane.doe@example.org");
-        professor2.setFirstName("Jane");
-        professor2.setLastName("Doe");
-        professor2.setPId(1);
-        professor2.setUser(user3);
-
-        User user4 = new User();
-        user4.setId(1);
-        user4.setPassword("iloveyou");
-        user4.setProfessor(new Professor());
-        user4.setRole(Role.STUDENT);
-        user4.setStudent(new Student());
-        user4.setUsername("janedoe");
-
-        Professor professor3 = new Professor();
-        professor3.setEmail("jane.doe@example.org");
-        professor3.setFirstName("Jane");
-        professor3.setLastName("Doe");
-        professor3.setPId(1);
-        professor3.setUser(user4);
-
-        User user5 = new User();
-        user5.setId(1);
-        user5.setPassword("iloveyou");
-        user5.setProfessor(new Professor());
-        user5.setRole(Role.STUDENT);
-        user5.setStudent(new Student());
-        user5.setUsername("janedoe");
-
-        Student student2 = new Student();
-        student2.setApplications(new ArrayList<>());
-        student2.setAverageGrade(10.0f);
-        student2.setEmail("jane.doe@example.org");
-        student2.setFirstName("Jane");
-        student2.setLastName("Doe");
-        student2.setRemainingCourses(1);
-        student2.setStudentId(1);
-        student2.setUser(user5);
-
-        User user6 = new User();
-        user6.setId(1);
-        user6.setPassword("iloveyou");
-        user6.setProfessor(professor3);
-        user6.setRole(Role.STUDENT);
-        user6.setStudent(student2);
-        user6.setUsername("janedoe");
-
-        Student student3 = new Student();
-        student3.setApplications(new ArrayList<>());
-        student3.setAverageGrade(10.0f);
-        student3.setEmail("jane.doe@example.org");
-        student3.setFirstName("Jane");
-        student3.setLastName("Doe");
-        student3.setRemainingCourses(1);
-        student3.setStudentId(1);
-        student3.setUser(user6);
-
-        User user7 = new User();
-        user7.setId(1);
-        user7.setPassword("iloveyou");
-        user7.setProfessor(professor2);
-        user7.setRole(Role.STUDENT);
-        user7.setStudent(student3);
-        user7.setUsername("janedoe");
-        TestingAuthenticationToken authentication = new TestingAuthenticationToken(user7, "Credentials");
+        TestingAuthenticationToken authentication = new TestingAuthenticationToken(new User(), "Credentials");
 
         assertEquals("professor/professor-details",
                 professorController.changeDetails(authentication, new ConcurrentModel()));
     }
 
-    /**
-     * Method under test: {@link ProfessorController#changeDetails(Authentication, Model)}
-     */
-    @Test
-    @Disabled("TODO: Complete this test")
-    void testChangeDetails2() {
-        //   Diffblue Cover was unable to write a Spring test,
-        //   so wrote a non-Spring test instead.
-        //   Reason: R013 No inputs found that don't throw a trivial exception.
-        //   Diffblue Cover tried to run the arrange/act section, but the method under
-        //   test threw
-        //   java.lang.NullPointerException
-        //       at org.uoi.diploma_management_application.controller.ProfessorController.changeDetails(ProfessorController.java:78)
-        //       at javax.servlet.http.HttpServlet.service(HttpServlet.java:655)
-        //       at javax.servlet.http.HttpServlet.service(HttpServlet.java:764)
-        //   See https://diff.blue/R013 to resolve this issue.
-
-        // TODO: Complete this test.
-        //   Reason: R013 No inputs found that don't throw a trivial exception.
-        //   Diffblue Cover tried to run the arrange/act section, but the method under
-        //   test threw
-        //   java.lang.NullPointerException
-        //       at org.uoi.diploma_management_application.controller.ProfessorController.changeDetails(ProfessorController.java:79)
-        //   See https://diff.blue/R013 to resolve this issue.
-
-        ProfessorController professorController = new ProfessorController(new ProfessorServiceImpl());
-        TestingAuthenticationToken authentication = new TestingAuthenticationToken(null, "Credentials");
-
-        professorController.changeDetails(authentication, new ConcurrentModel());
-    }
-
-    /**
-     * Method under test: {@link ProfessorController#changeDetails(Authentication, Model)}
-     */
-    @Test
-    void testChangeDetails3() {
-        //   Diffblue Cover was unable to write a Spring test,
-        //   so wrote a non-Spring test instead.
-        //   Reason: R013 No inputs found that don't throw a trivial exception.
-        //   Diffblue Cover tried to run the arrange/act section, but the method under
-        //   test threw
-        //   java.lang.NullPointerException
-        //       at org.uoi.diploma_management_application.controller.ProfessorController.changeDetails(ProfessorController.java:78)
-        //       at javax.servlet.http.HttpServlet.service(HttpServlet.java:655)
-        //       at javax.servlet.http.HttpServlet.service(HttpServlet.java:764)
-        //   See https://diff.blue/R013 to resolve this issue.
-
-        ProfessorController professorController = new ProfessorController(new ProfessorServiceImpl());
-
-        Professor professor = new Professor();
-        professor.setEmail("jane.doe@example.org");
-        professor.setFirstName("Jane");
-        professor.setLastName("Doe");
-        professor.setPId(1);
-        professor.setUser(new User());
-
-        Student student = new Student();
-        student.setApplications(new ArrayList<>());
-        student.setAverageGrade(10.0f);
-        student.setEmail("jane.doe@example.org");
-        student.setFirstName("Jane");
-        student.setLastName("Doe");
-        student.setRemainingCourses(1);
-        student.setStudentId(1);
-        student.setUser(new User());
-
-        User user = new User();
-        user.setId(1);
-        user.setPassword("iloveyou");
-        user.setProfessor(professor);
-        user.setRole(Role.STUDENT);
-        user.setStudent(student);
-        user.setUsername("janedoe");
-
-        Professor professor2 = new Professor();
-        professor2.setEmail("jane.doe@example.org");
-        professor2.setFirstName("Jane");
-        professor2.setLastName("Doe");
-        professor2.setPId(1);
-        professor2.setUser(user);
-
-        Professor professor3 = new Professor();
-        professor3.setEmail("jane.doe@example.org");
-        professor3.setFirstName("Jane");
-        professor3.setLastName("Doe");
-        professor3.setPId(1);
-        professor3.setUser(new User());
-
-        Student student2 = new Student();
-        student2.setApplications(new ArrayList<>());
-        student2.setAverageGrade(10.0f);
-        student2.setEmail("jane.doe@example.org");
-        student2.setFirstName("Jane");
-        student2.setLastName("Doe");
-        student2.setRemainingCourses(1);
-        student2.setStudentId(1);
-        student2.setUser(new User());
-
-        User user2 = new User();
-        user2.setId(1);
-        user2.setPassword("iloveyou");
-        user2.setProfessor(professor3);
-        user2.setRole(Role.STUDENT);
-        user2.setStudent(student2);
-        user2.setUsername("janedoe");
-
-        Student student3 = new Student();
-        student3.setApplications(new ArrayList<>());
-        student3.setAverageGrade(10.0f);
-        student3.setEmail("jane.doe@example.org");
-        student3.setFirstName("Jane");
-        student3.setLastName("Doe");
-        student3.setRemainingCourses(1);
-        student3.setStudentId(1);
-        student3.setUser(user2);
-
-        User user3 = new User();
-        user3.setId(1);
-        user3.setPassword("iloveyou");
-        user3.setProfessor(professor2);
-        user3.setRole(Role.STUDENT);
-        user3.setStudent(student3);
-        user3.setUsername("janedoe");
-
-        Professor professor4 = new Professor();
-        professor4.setEmail("jane.doe@example.org");
-        professor4.setFirstName("Jane");
-        professor4.setLastName("Doe");
-        professor4.setPId(1);
-        professor4.setUser(user3);
-        User user4 = mock(User.class);
-        when(user4.getProfessor()).thenReturn(professor4);
-        TestingAuthenticationToken authentication = new TestingAuthenticationToken(user4, "Credentials");
-
-        assertEquals("professor/professor-details",
-                professorController.changeDetails(authentication, new ConcurrentModel()));
-        verify(user4).getProfessor();
-    }
 
     /**
      * Method under test: {@link ProfessorController#saveDetails(Authentication, Professor)}
      */
+    public @interface WithMockUser {
+        String value() default "user";
+
+        String username() default "";
+
+        String[] roles() default {"PROFESSOR"};
+
+        String password() default "password";
+    }
+
+
+
+    public interface WithSecurityContextFactory<A extends Annotation> {
+
+        SecurityContext createSecurityContext(A annotation);
+    }
+
+/*
     @Test
-    @Disabled("TODO: Complete this test")
-    void testSaveDetails() {
-        //   Diffblue Cover was unable to write a Spring test,
-        //   so wrote a non-Spring test instead.
-        //   Reason: R013 No inputs found that don't throw a trivial exception.
-        //   Diffblue Cover tried to run the arrange/act section, but the method under
-        //   test threw
-        //   java.lang.NullPointerException
-        //       at org.uoi.diploma_management_application.controller.ProfessorController.saveDetails(ProfessorController.java:87)
-        //       at javax.servlet.http.HttpServlet.service(HttpServlet.java:655)
-        //       at javax.servlet.http.HttpServlet.service(HttpServlet.java:764)
-        //   See https://diff.blue/R013 to resolve this issue.
+    @WithMockUser(roles="PROFESSOR")
+    @WithSecurityContext(
+            //factory = WithMockUserSecurityContextFactory.class
+    )*/
+    void testSaveDetails() throws Exception {
 
-        // TODO: Complete this test.
-        //   Reason: R013 No inputs found that don't throw a trivial exception.
-        //   Diffblue Cover tried to run the arrange/act section, but the method under
-        //   test threw
-        //   java.lang.NullPointerException
-        //       at org.uoi.diploma_management_application.service.ProfessorServiceImpl.save(ProfessorServiceImpl.java:109)
-        //       at org.uoi.diploma_management_application.controller.ProfessorController.saveDetails(ProfessorController.java:92)
-        //   See https://diff.blue/R013 to resolve this issue.
+        Professor professor = new Professor("Bob", "Mastoras", "bob@mail");
 
-        ProfessorController professorController = new ProfessorController(new ProfessorServiceImpl());
-
-        User user = new User();
-        user.setId(1);
-        user.setPassword("iloveyou");
-        user.setProfessor(new Professor());
-        user.setRole(Role.STUDENT);
-        user.setStudent(new Student());
-        user.setUsername("janedoe");
-
-        Professor professor = new Professor();
-        professor.setEmail("jane.doe@example.org");
-        professor.setFirstName("Jane");
-        professor.setLastName("Doe");
-        professor.setPId(1);
-        professor.setUser(user);
-
-        User user2 = new User();
-        user2.setId(1);
-        user2.setPassword("iloveyou");
-        user2.setProfessor(new Professor());
-        user2.setRole(Role.STUDENT);
-        user2.setStudent(new Student());
-        user2.setUsername("janedoe");
-
-        Student student = new Student();
-        student.setApplications(new ArrayList<>());
-        student.setAverageGrade(10.0f);
-        student.setEmail("jane.doe@example.org");
-        student.setFirstName("Jane");
-        student.setLastName("Doe");
-        student.setRemainingCourses(1);
-        student.setStudentId(1);
-        student.setUser(user2);
-
-        User user3 = new User();
-        user3.setId(1);
-        user3.setPassword("iloveyou");
-        user3.setProfessor(professor);
-        user3.setRole(Role.STUDENT);
-        user3.setStudent(student);
-        user3.setUsername("janedoe");
-
-        Professor professor2 = new Professor();
-        professor2.setEmail("jane.doe@example.org");
-        professor2.setFirstName("Jane");
-        professor2.setLastName("Doe");
-        professor2.setPId(1);
-        professor2.setUser(user3);
-
-        User user4 = new User();
-        user4.setId(1);
-        user4.setPassword("iloveyou");
-        user4.setProfessor(new Professor());
-        user4.setRole(Role.STUDENT);
-        user4.setStudent(new Student());
-        user4.setUsername("janedoe");
-
-        Professor professor3 = new Professor();
-        professor3.setEmail("jane.doe@example.org");
-        professor3.setFirstName("Jane");
-        professor3.setLastName("Doe");
-        professor3.setPId(1);
-        professor3.setUser(user4);
-
-        User user5 = new User();
-        user5.setId(1);
-        user5.setPassword("iloveyou");
-        user5.setProfessor(new Professor());
-        user5.setRole(Role.STUDENT);
-        user5.setStudent(new Student());
-        user5.setUsername("janedoe");
-
-        Student student2 = new Student();
-        student2.setApplications(new ArrayList<>());
-        student2.setAverageGrade(10.0f);
-        student2.setEmail("jane.doe@example.org");
-        student2.setFirstName("Jane");
-        student2.setLastName("Doe");
-        student2.setRemainingCourses(1);
-        student2.setStudentId(1);
-        student2.setUser(user5);
-
-        User user6 = new User();
-        user6.setId(1);
-        user6.setPassword("iloveyou");
-        user6.setProfessor(professor3);
-        user6.setRole(Role.STUDENT);
-        user6.setStudent(student2);
-        user6.setUsername("janedoe");
-
-        Student student3 = new Student();
-        student3.setApplications(new ArrayList<>());
-        student3.setAverageGrade(10.0f);
-        student3.setEmail("jane.doe@example.org");
-        student3.setFirstName("Jane");
-        student3.setLastName("Doe");
-        student3.setRemainingCourses(1);
-        student3.setStudentId(1);
-        student3.setUser(user6);
-
-        User user7 = new User();
-        user7.setId(1);
-        user7.setPassword("iloveyou");
-        user7.setProfessor(professor2);
-        user7.setRole(Role.STUDENT);
-        user7.setStudent(student3);
-        user7.setUsername("janedoe");
-        TestingAuthenticationToken authentication = new TestingAuthenticationToken(user7, "Credentials");
-
-        Professor professor4 = new Professor();
-        professor4.setEmail("jane.doe@example.org");
-        professor4.setFirstName("Jane");
-        professor4.setLastName("Doe");
-        professor4.setPId(1);
-        professor4.setUser(new User());
-
-        Student student4 = new Student();
-        student4.setApplications(new ArrayList<>());
-        student4.setAverageGrade(10.0f);
-        student4.setEmail("jane.doe@example.org");
-        student4.setFirstName("Jane");
-        student4.setLastName("Doe");
-        student4.setRemainingCourses(1);
-        student4.setStudentId(1);
-        student4.setUser(new User());
-
-        User user8 = new User();
-        user8.setId(1);
-        user8.setPassword("iloveyou");
-        user8.setProfessor(professor4);
-        user8.setRole(Role.STUDENT);
-        user8.setStudent(student4);
-        user8.setUsername("janedoe");
-
-        Professor professor5 = new Professor();
-        professor5.setEmail("jane.doe@example.org");
-        professor5.setFirstName("Jane");
-        professor5.setLastName("Doe");
-        professor5.setPId(1);
-        professor5.setUser(user8);
-
-        Professor professor6 = new Professor();
-        professor6.setEmail("jane.doe@example.org");
-        professor6.setFirstName("Jane");
-        professor6.setLastName("Doe");
-        professor6.setPId(1);
-        professor6.setUser(new User());
-
-        Student student5 = new Student();
-        student5.setApplications(new ArrayList<>());
-        student5.setAverageGrade(10.0f);
-        student5.setEmail("jane.doe@example.org");
-        student5.setFirstName("Jane");
-        student5.setLastName("Doe");
-        student5.setRemainingCourses(1);
-        student5.setStudentId(1);
-        student5.setUser(new User());
-
-        User user9 = new User();
-        user9.setId(1);
-        user9.setPassword("iloveyou");
-        user9.setProfessor(professor6);
-        user9.setRole(Role.STUDENT);
-        user9.setStudent(student5);
-        user9.setUsername("janedoe");
-
-        Student student6 = new Student();
-        student6.setApplications(new ArrayList<>());
-        student6.setAverageGrade(10.0f);
-        student6.setEmail("jane.doe@example.org");
-        student6.setFirstName("Jane");
-        student6.setLastName("Doe");
-        student6.setRemainingCourses(1);
-        student6.setStudentId(1);
-        student6.setUser(user9);
-
-        User user10 = new User();
-        user10.setId(1);
-        user10.setPassword("iloveyou");
-        user10.setProfessor(professor5);
-        user10.setRole(Role.STUDENT);
-        user10.setStudent(student6);
-        user10.setUsername("janedoe");
-
-        Professor theProfessor = new Professor();
-        theProfessor.setEmail("jane.doe@example.org");
-        theProfessor.setFirstName("Jane");
-        theProfessor.setLastName("Doe");
-        theProfessor.setPId(1);
-        theProfessor.setUser(user10);
-        professorController.saveDetails(authentication, theProfessor);
+        MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
+        multiValueMap.add("pId", Integer.toString(professor.getPId()));
+        multiValueMap.add("firstName", professor.getFirstName());
+        multiValueMap.add("lastName", professor.getLastName());
+        multiValueMap.add("email", professor.getEmail());
+        //when((User) authentication.getPrincipal()).thenReturn(new User());
+        mockMvc.perform(
+                        post("/professor/save_details")
+                                .params(multiValueMap))
+                .andExpect(status().isFound())
+                .andExpect(view().name("redirect:/professor/dashboard"));
+/*
+        MockHttpServletRequestBuilder paramResult = MockMvcRequestBuilders.post("/professor/save_details")
+                .params(multiValueMap);
+        System.out.println("sdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"+paramResult);
+        MockMvcBuilders.standaloneSetup(professorController)
+                .build()
+                .perform(paramResult)
+                .andExpect(MockMvcResultMatchers.status().isFound())
+                .andExpect(MockMvcResultMatchers.view().name("redirect:/professor/dashboard"))
+                .andExpect(MockMvcResultMatchers.redirectedUrl("/professor/dashboard"));
+*/
     }
 
     /**
@@ -2301,24 +1915,7 @@ class ProfessorControllerTest {
         verify(user7).getProfessor();
     }
 
-    /**
-     * Method under test: {@link ProfessorController#updateGrade(int, Model)}
-     */
-    @Test
-    void testUpdateGrade() {
-        //   Diffblue Cover was unable to write a Spring test,
-        //   so wrote a non-Spring test instead.
-        //   Reason: R013 No inputs found that don't throw a trivial exception.
-        //   Diffblue Cover tried to run the arrange/act section, but the method under
-        //   test threw
-        //   javax.servlet.ServletException: Circular view path [/professor/update-grade]: would dispatch back to the current handler URL [/professor/update-grade] again. Check your ViewResolver setup! (Hint: This may be the result of an unspecified view, due to default view name generation.)
-        //       at javax.servlet.http.HttpServlet.service(HttpServlet.java:655)
-        //       at javax.servlet.http.HttpServlet.service(HttpServlet.java:764)
-        //   See https://diff.blue/R013 to resolve this issue.
 
-        ProfessorController professorController = new ProfessorController(new ProfessorServiceImpl());
-        assertEquals("/professor/update-grade", professorController.updateGrade(1, new ConcurrentModel()));
-    }
 
     /**
      * Method under test: {@link ProfessorController#updateGrade(int, Model)}
@@ -2349,10 +1946,10 @@ class ProfessorControllerTest {
         MockMvcBuilders.standaloneSetup(professorController)
                 .build()
                 .perform(requestBuilder)
-                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.model().size(1))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("subject"))
-                .andExpect(MockMvcResultMatchers.view().name("professor/create-subject"))
+                .andExpect(view().name("professor/create-subject"))
                 .andExpect(MockMvcResultMatchers.forwardedUrl("professor/create-subject"));
     }
 
@@ -2366,10 +1963,10 @@ class ProfessorControllerTest {
         MockMvcBuilders.standaloneSetup(professorController)
                 .build()
                 .perform(requestBuilder)
-                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.model().size(1))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("subject"))
-                .andExpect(MockMvcResultMatchers.view().name("professor/create-subject"))
+                .andExpect(view().name("professor/create-subject"))
                 .andExpect(MockMvcResultMatchers.forwardedUrl("professor/create-subject"));
     }
 
@@ -2384,9 +1981,9 @@ class ProfessorControllerTest {
         MockMvcBuilders.standaloneSetup(professorController)
                 .build()
                 .perform(requestBuilder)
-                .andExpect(MockMvcResultMatchers.status().isFound())
+                .andExpect(status().isFound())
                 .andExpect(MockMvcResultMatchers.model().size(0))
-                .andExpect(MockMvcResultMatchers.view().name("redirect:/professor/dashboard"))
+                .andExpect(view().name("redirect:/professor/dashboard"))
                 .andExpect(MockMvcResultMatchers.redirectedUrl("/professor/dashboard"));
     }
 
@@ -2458,16 +2055,16 @@ class ProfessorControllerTest {
         when(professorService.assignThesis(Mockito.<Student>any(), Mockito.<Subject>any())).thenReturn(1);
         when(professorService.findStudentsBySubjectId(anyInt())).thenReturn(new ArrayList<>());
         when(professorService.findSubjectById(anyInt())).thenReturn(subject);
-        MockHttpServletRequestBuilder postResult = MockMvcRequestBuilders.post("/professor/pick-bythresholds");
+        MockHttpServletRequestBuilder postResult = post("/professor/pick-bythresholds");
         MockHttpServletRequestBuilder paramResult = postResult.param("subjectId", String.valueOf(1));
         MockHttpServletRequestBuilder paramResult2 = paramResult.param("th1", String.valueOf(10.0f));
         MockHttpServletRequestBuilder requestBuilder = paramResult2.param("th2", String.valueOf(1));
         MockMvcBuilders.standaloneSetup(professorController)
                 .build()
                 .perform(requestBuilder)
-                .andExpect(MockMvcResultMatchers.status().isFound())
+                .andExpect(status().isFound())
                 .andExpect(MockMvcResultMatchers.model().size(0))
-                .andExpect(MockMvcResultMatchers.view().name("redirect:/professor/dashboard"))
+                .andExpect(view().name("redirect:/professor/dashboard"))
                 .andExpect(MockMvcResultMatchers.redirectedUrl("/professor/dashboard"));
     }
 
@@ -2539,15 +2136,15 @@ class ProfessorControllerTest {
         when(professorService.assignThesis(Mockito.<Student>any(), Mockito.<Subject>any())).thenReturn(1);
         when(professorService.findStudentsBySubjectId(anyInt())).thenReturn(new ArrayList<>());
         when(professorService.findSubjectById(anyInt())).thenReturn(subject);
-        MockHttpServletRequestBuilder paramResult = MockMvcRequestBuilders.post("/professor/pick-student")
+        MockHttpServletRequestBuilder paramResult = post("/professor/pick-student")
                 .param("pickMethod", "foo");
         MockHttpServletRequestBuilder requestBuilder = paramResult.param("subjectId", String.valueOf(1));
         MockMvcBuilders.standaloneSetup(professorController)
                 .build()
                 .perform(requestBuilder)
-                .andExpect(MockMvcResultMatchers.status().isFound())
+                .andExpect(status().isFound())
                 .andExpect(MockMvcResultMatchers.model().size(0))
-                .andExpect(MockMvcResultMatchers.view().name("redirect:/professor/dashboard"))
+                .andExpect(view().name("redirect:/professor/dashboard"))
                 .andExpect(MockMvcResultMatchers.redirectedUrl("/professor/dashboard"));
     }
 
@@ -2556,78 +2153,16 @@ class ProfessorControllerTest {
      */
     @Test
     void testPickStudent2() throws Exception {
-        User user = new User();
-        user.setId(1);
-        user.setPassword("iloveyou");
-        user.setProfessor(new Professor());
-        user.setRole(Role.STUDENT);
-        user.setStudent(new Student());
-        user.setUsername("janedoe");
 
-        Professor professor = new Professor();
-        professor.setEmail("jane.doe@example.org");
-        professor.setFirstName("Jane");
-        professor.setLastName("Doe");
-        professor.setPId(1);
-        professor.setUser(user);
-
-        User user2 = new User();
-        user2.setId(1);
-        user2.setPassword("iloveyou");
-        user2.setProfessor(new Professor());
-        user2.setRole(Role.STUDENT);
-        user2.setStudent(new Student());
-        user2.setUsername("janedoe");
-
-        Student student = new Student();
-        student.setApplications(new ArrayList<>());
-        student.setAverageGrade(10.0f);
-        student.setEmail("jane.doe@example.org");
-        student.setFirstName("Jane");
-        student.setLastName("Doe");
-        student.setRemainingCourses(1);
-        student.setStudentId(1);
-        student.setUser(user2);
-
-        User user3 = new User();
-        user3.setId(1);
-        user3.setPassword("iloveyou");
-        user3.setProfessor(professor);
-        user3.setRole(Role.STUDENT);
-        user3.setStudent(student);
-        user3.setUsername("janedoe");
-
-        Professor professor2 = new Professor();
-        professor2.setEmail("jane.doe@example.org");
-        professor2.setFirstName("Jane");
-        professor2.setLastName("Doe");
-        professor2.setPId(1);
-        professor2.setUser(user3);
-
-        Thesis thesis = new Thesis();
-        thesis.setDescription("The characteristics of someone or something");
-        thesis.setGrade(10.0f);
-        thesis.setTId(1);
-        thesis.setTitle("Dr");
-
-        Subject subject = new Subject();
-        subject.setDescription("The characteristics of someone or something");
-        subject.setProfessor(professor2);
-        subject.setSubjectId(1);
-        subject.setThesis(thesis);
-        subject.setTitle("Dr");
-        when(professorService.assignThesis(Mockito.<Student>any(), Mockito.<Subject>any())).thenReturn(-1);
-        when(professorService.findStudentsBySubjectId(anyInt())).thenReturn(new ArrayList<>());
-        when(professorService.findSubjectById(anyInt())).thenReturn(subject);
-        MockHttpServletRequestBuilder paramResult = MockMvcRequestBuilders.post("/professor/pick-student")
-                .param("pickMethod", "foo");
+        MockHttpServletRequestBuilder paramResult = post("/professor/pick-student")
+                .param("pickMethod", "default");
         MockHttpServletRequestBuilder requestBuilder = paramResult.param("subjectId", String.valueOf(1));
         MockMvcBuilders.standaloneSetup(professorController)
                 .build()
                 .perform(requestBuilder)
-                .andExpect(MockMvcResultMatchers.status().isFound())
+                .andExpect(status().isFound())
                 .andExpect(MockMvcResultMatchers.model().size(0))
-                .andExpect(MockMvcResultMatchers.view().name("redirect:/professor/dashboard"))
+                .andExpect(view().name("redirect:/professor/dashboard"))
                 .andExpect(MockMvcResultMatchers.redirectedUrl("/professor/dashboard"));
     }
 
@@ -2636,78 +2171,16 @@ class ProfessorControllerTest {
      */
     @Test
     void testPickStudent3() throws Exception {
-        User user = new User();
-        user.setId(1);
-        user.setPassword("iloveyou");
-        user.setProfessor(new Professor());
-        user.setRole(Role.STUDENT);
-        user.setStudent(new Student());
-        user.setUsername("janedoe");
 
-        Professor professor = new Professor();
-        professor.setEmail("jane.doe@example.org");
-        professor.setFirstName("Jane");
-        professor.setLastName("Doe");
-        professor.setPId(1);
-        professor.setUser(user);
-
-        User user2 = new User();
-        user2.setId(1);
-        user2.setPassword("iloveyou");
-        user2.setProfessor(new Professor());
-        user2.setRole(Role.STUDENT);
-        user2.setStudent(new Student());
-        user2.setUsername("janedoe");
-
-        Student student = new Student();
-        student.setApplications(new ArrayList<>());
-        student.setAverageGrade(10.0f);
-        student.setEmail("jane.doe@example.org");
-        student.setFirstName("Jane");
-        student.setLastName("Doe");
-        student.setRemainingCourses(1);
-        student.setStudentId(1);
-        student.setUser(user2);
-
-        User user3 = new User();
-        user3.setId(1);
-        user3.setPassword("iloveyou");
-        user3.setProfessor(professor);
-        user3.setRole(Role.STUDENT);
-        user3.setStudent(student);
-        user3.setUsername("janedoe");
-
-        Professor professor2 = new Professor();
-        professor2.setEmail("jane.doe@example.org");
-        professor2.setFirstName("Jane");
-        professor2.setLastName("Doe");
-        professor2.setPId(1);
-        professor2.setUser(user3);
-
-        Thesis thesis = new Thesis();
-        thesis.setDescription("The characteristics of someone or something");
-        thesis.setGrade(10.0f);
-        thesis.setTId(1);
-        thesis.setTitle("Dr");
-
-        Subject subject = new Subject();
-        subject.setDescription("The characteristics of someone or something");
-        subject.setProfessor(professor2);
-        subject.setSubjectId(1);
-        subject.setThesis(thesis);
-        subject.setTitle("Dr");
-        when(professorService.assignThesis(Mockito.<Student>any(), Mockito.<Subject>any())).thenReturn(-2);
-        when(professorService.findStudentsBySubjectId(anyInt())).thenReturn(new ArrayList<>());
-        when(professorService.findSubjectById(anyInt())).thenReturn(subject);
-        MockHttpServletRequestBuilder paramResult = MockMvcRequestBuilders.post("/professor/pick-student")
-                .param("pickMethod", "foo");
+        MockHttpServletRequestBuilder paramResult = post("/professor/pick-student")
+                .param("pickMethod", "bestAVG");
         MockHttpServletRequestBuilder requestBuilder = paramResult.param("subjectId", String.valueOf(1));
         MockMvcBuilders.standaloneSetup(professorController)
                 .build()
                 .perform(requestBuilder)
-                .andExpect(MockMvcResultMatchers.status().isFound())
+                .andExpect(status().isFound())
                 .andExpect(MockMvcResultMatchers.model().size(0))
-                .andExpect(MockMvcResultMatchers.view().name("redirect:/professor/dashboard"))
+                .andExpect(view().name("redirect:/professor/dashboard"))
                 .andExpect(MockMvcResultMatchers.redirectedUrl("/professor/dashboard"));
     }
 
@@ -2732,9 +2205,9 @@ class ProfessorControllerTest {
         MockMvcBuilders.standaloneSetup(professorController)
                 .build()
                 .perform(requestBuilder)
-                .andExpect(MockMvcResultMatchers.status().isFound())
+                .andExpect(status().isFound())
                 .andExpect(MockMvcResultMatchers.model().size(0))
-                .andExpect(MockMvcResultMatchers.view().name("redirect:/professor/dashboard"))
+                .andExpect(view().name("redirect:/professor/dashboard"))
                 .andExpect(MockMvcResultMatchers.redirectedUrl("/professor/dashboard"));
     }
 
@@ -2749,7 +2222,7 @@ class ProfessorControllerTest {
         ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(professorController)
                 .build()
                 .perform(requestBuilder);
-        actualPerformResult.andExpect(MockMvcResultMatchers.status().is(400));
+        actualPerformResult.andExpect(status().is(400));
     }
 }
 

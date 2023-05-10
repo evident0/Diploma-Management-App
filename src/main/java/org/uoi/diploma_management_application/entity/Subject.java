@@ -89,6 +89,10 @@ public class Subject {
         return applications;
     }
 
+    public void setApplications(List<Application> applications){
+        this.applications = applications;
+    }
+
     @Override
     public String toString() {
         return "Subject [id=" + subjectId + ", title=" + title + ", " +

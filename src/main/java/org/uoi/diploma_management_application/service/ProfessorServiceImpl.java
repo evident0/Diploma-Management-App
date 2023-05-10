@@ -158,8 +158,8 @@ public class ProfessorServiceImpl implements ProfessorService {
 		if(student==null) {
 			return -2;
 		}
-		Thesis newTheis = new Thesis(subject, student);
-		saveThesis(newTheis);
+		Thesis newThesis = new Thesis(subject, student);
+		saveThesis(newThesis);
 		ApplicationKey applicationId = new ApplicationKey(subject.getSubjectId(),student.getStudentId());
 		deleteApplicationById(applicationId);
 		return 0;

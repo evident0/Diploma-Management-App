@@ -71,12 +71,6 @@ public class StudentServiceImpl implements StudentService {
         }
     }
 
-    @Override
-    public List<Application> listStudentSubjects(int studentId) {
-        //find by id
-        Student student = studentRepository.findById(studentId);
-        return student.getApplications();
-    }
 
     @Override
     @Transactional
@@ -88,12 +82,6 @@ public class StudentServiceImpl implements StudentService {
     @Transactional
     public void saveApplication(Application theApplication) {
         applicationRepository.save(theApplication);
-    }
-
-    @Override
-    @Transactional
-    public void deleteById(int studentId) {
-        studentRepository.deleteById(studentId);
     }
 
     public List<Subject> getAvailableSubjects() {

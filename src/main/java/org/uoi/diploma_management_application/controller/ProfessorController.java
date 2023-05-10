@@ -2,6 +2,7 @@ package org.uoi.diploma_management_application.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -82,7 +83,7 @@ public class ProfessorController {
     }
 
     @RequestMapping(value = "/professor/save_details")
-    public String saveDetails(Authentication authentication, @ModelAttribute("professor") Professor theProfessor) {
+    public String saveDetails( Authentication authentication, @ModelAttribute("professor") Professor theProfessor) {
 
         User user = (User) authentication.getPrincipal();
         Professor professor = user.getProfessor();

@@ -83,7 +83,7 @@ public class ProfessorController {
     }
 
     @RequestMapping(value = "/professor/save_details")
-    public String saveDetails( Authentication authentication, @ModelAttribute("professor") Professor theProfessor) {
+    public String saveDetails(Authentication authentication, @ModelAttribute("professor") Professor theProfessor) {
 
         User user = (User) authentication.getPrincipal();
         Professor professor = user.getProfessor();

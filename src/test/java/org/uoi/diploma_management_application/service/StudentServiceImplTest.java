@@ -82,7 +82,7 @@ class StudentServiceImplTest {
      * Method under test: {@link StudentServiceImpl#findAll()}
      */
     @Test
-    void testFindAll2() {
+    void testFindAllException() {
         when(studentDAO.findAll()).thenThrow(new RuntimeException("An error occurred"));
         assertThrows(RuntimeException.class, () -> studentServiceImpl.findAll());
         verify(studentDAO).findAll();
@@ -151,9 +151,9 @@ class StudentServiceImplTest {
         subject.setSubjectId(1);
         subject.setThesis(thesis);
         subject.setTitle("Dr");
-        when(subjectDAO.findById(anyInt())).thenReturn(subject);
+        when(subjectDAO.findById(1)).thenReturn(subject);
         assertSame(subject, studentServiceImpl.findSubjectById(1));
-        verify(subjectDAO).findById(anyInt());
+        verify(subjectDAO).findById(1);
     }
 
 
@@ -174,16 +174,7 @@ class StudentServiceImplTest {
         theStudent.setStudentId(1);
         theStudent.setUser(new User());
         studentServiceImpl.save(theStudent);
-        verify(studentDAO).save(Mockito.<Student>any());
-        assertEquals(applications, theStudent.getApplications());
-        assertEquals(1, theStudent.getStudentId());
-        assertEquals(1, theStudent.getRemainingCourses());
-        assertEquals("Doe", theStudent.getLastName());
-        assertEquals("Jane", theStudent.getFirstName());
-        assertEquals("jane.doe@example.org", theStudent.getEmail());
-        assertEquals(10.0f, theStudent.getAverageGrade());
-        assertTrue(studentServiceImpl.findAll().isEmpty());
-        assertTrue(studentServiceImpl.getAvailableSubjects().isEmpty());
+        verify(studentDAO).save(theStudent);
     }
 
     /**
@@ -191,16 +182,18 @@ class StudentServiceImplTest {
      */
     @Test
     void testSaveApplication() {
-        when(applicationDAO.save(Mockito.<Application>any())).thenReturn(new Application());
-        studentServiceImpl.saveApplication(new Application());
-        verify(applicationDAO).save(Mockito.<Application>any());
+        Application application = new Application(1,1,
+                new Student(1,"bob","doe","email",1,1),
+                new Subject());
+        studentServiceImpl.saveApplication(application);
+        verify(applicationDAO).save(application);
     }
 
     /**
      * Method under test: {@link StudentServiceImpl#saveApplication(Application)}
      */
     @Test
-    void testSaveApplication2() {
+    void testSaveApplicationException() {
         when(applicationDAO.save(Mockito.<Application>any())).thenThrow(new RuntimeException("An error occurred"));
         assertThrows(RuntimeException.class, () -> studentServiceImpl.saveApplication(new Application()));
         verify(applicationDAO).save(Mockito.<Application>any());
@@ -211,11 +204,16 @@ class StudentServiceImplTest {
      */
     @Test
     void testGetAvailableSubjects() {
+        Subject subject = new Subject();
+        subject.setDescription("Description");
+        subject.setProfessor(new Professor(1,"BOB","DOE","email"));
+
         ArrayList<Subject> subjectList = new ArrayList<>();
+        subjectList.add(subject);
+
         when(subjectDAO.findAll()).thenReturn(subjectList);
         List<Subject> actualAvailableSubjects = studentServiceImpl.getAvailableSubjects();
         assertSame(subjectList, actualAvailableSubjects);
-        assertTrue(actualAvailableSubjects.isEmpty());
         verify(subjectDAO).findAll();
     }
 

@@ -255,8 +255,7 @@ class ProfessorControllerTest {
         TestingAuthenticationToken authentication = new TestingAuthenticationToken(user, "Credentials");
 
         MockHttpServletRequestBuilder requestBuilder = post("/professor/dashboard").
-                principal(authentication).
-                flashAttr("professor", professor);
+                principal(authentication);
 
         MockMvcBuilders.standaloneSetup(professorController)
                 .build()

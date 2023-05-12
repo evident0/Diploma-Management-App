@@ -164,7 +164,6 @@ class StudentServiceImplTest {
     void testSave() {
         ArrayList<Application> applications = new ArrayList<>();
 
-
         Student theStudent = new Student();
         theStudent.setApplications(new ArrayList<>());
         theStudent.setAverageGrade(10.0f);

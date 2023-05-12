@@ -8,6 +8,9 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,96 +58,47 @@ class StudentControllerTest {
      * Method under test: {@link StudentController#getUserHome(Authentication, Model)}
      */
     @Test
-    void testGetUserHome() {
-        StudentDAO theStudentRepository = mock(StudentDAO.class);
-        when(theStudentRepository.findById(anyInt())).thenReturn(new Student());
-        SubjectDAO subjectDAO = mock(SubjectDAO.class);
-        when(subjectDAO.findAll()).thenReturn(new ArrayList<>());
-        StudentController studentController = new StudentController(
-                new StudentServiceImpl(theStudentRepository, mock(SubjectDAO.class), mock(ApplicationDAO.class), subjectDAO));
+    void testGetUserHome() throws Exception {
+        Student student = new Student();
 
         User user = mock(User.class);
         doNothing().when(user).setStudent(Mockito.<Student>any());
-        when(user.getStudent()).thenReturn(new Student());
+        when(user.getStudent()).thenReturn(student);
+
         TestingAuthenticationToken authentication = new TestingAuthenticationToken(user, "Credentials");
 
-        assertEquals("student/dashboard", studentController.getUserHome(authentication, new ConcurrentModel()));
-        verify(theStudentRepository).findById(anyInt());
-        verify(subjectDAO).findAll();
-        verify(user, atLeast(1)).getStudent();
-        verify(user).setStudent(Mockito.<Student>any());
+        MockHttpServletRequestBuilder requestBuilder = post("/student/dashboard").
+                principal(authentication);
+
+        MockMvcBuilders.standaloneSetup(studentController)
+                .build()
+                .perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andExpect(view().name("student/dashboard"));
     }
 
     /**
      * Method under test: {@link StudentController#getUserAvailableSubjects(Authentication, Model)}
      */
     @Test
-    void testGetUserAvailableSubjects() {
-        SubjectDAO subjectDAO = mock(SubjectDAO.class);
-        when(subjectDAO.findAll()).thenReturn(new ArrayList<>());
-        StudentController studentController = new StudentController(new StudentServiceImpl(mock(StudentDAO.class),
-                mock(SubjectDAO.class), mock(ApplicationDAO.class), subjectDAO));
+    void testGetUserAvailableSubjects() throws Exception {
+        Student student = new Student();
+
         User user = mock(User.class);
-        when(user.getStudent()).thenReturn(new Student());
+        doNothing().when(user).setStudent(Mockito.<Student>any());
+        when(user.getStudent()).thenReturn(student);
+
         TestingAuthenticationToken authentication = new TestingAuthenticationToken(user, "Credentials");
 
-        assertEquals("student/available-subjects",
-                studentController.getUserAvailableSubjects(authentication, new ConcurrentModel()));
-        verify(subjectDAO).findAll();
-        verify(user).getStudent();
-    }
+        MockHttpServletRequestBuilder requestBuilder = post("/student/available-subjects").
+                principal(authentication);
 
-    /**
-     * Method under test: {@link StudentController#getUserAvailableSubjects(Authentication, Model)}
-     */
-    @Test
-    void testGetUserAvailableSubjects2() {
-        SubjectDAO subjectDAO = mock(SubjectDAO.class);
-        when(subjectDAO.findAll()).thenReturn(new ArrayList<>());
-        StudentController studentController = new StudentController(new StudentServiceImpl(mock(StudentDAO.class),
-                mock(SubjectDAO.class), mock(ApplicationDAO.class), subjectDAO));
-        User user3 = new User();
-        user3.setId(1);
-        user3.setPassword("iloveyou");
-        user3.setProfessor(new Professor());
-        user3.setRole(Role.STUDENT);
-        user3.setStudent(new Student());
-        user3.setUsername("janedoe");
-        Student student4 = mock(Student.class);
-        when(student4.getStudentId()).thenReturn(1);
-        doNothing().when(student4).setApplications(Mockito.<List<Application>>any());
-        doNothing().when(student4).setAverageGrade(anyFloat());
-        doNothing().when(student4).setEmail(Mockito.<String>any());
-        doNothing().when(student4).setFirstName(Mockito.<String>any());
-        doNothing().when(student4).setLastName(Mockito.<String>any());
-        doNothing().when(student4).setRemainingCourses(anyInt());
-        doNothing().when(student4).setStudentId(anyInt());
-        doNothing().when(student4).setUser(Mockito.<User>any());
-        student4.setApplications(new ArrayList<>());
-        student4.setAverageGrade(10.0f);
-        student4.setEmail("jane.doe@example.org");
-        student4.setFirstName("Jane");
-        student4.setLastName("Doe");
-        student4.setRemainingCourses(1);
-        student4.setStudentId(1);
-        student4.setUser(user3);
-        User user4 = mock(User.class);
-        when(user4.getStudent()).thenReturn(student4);
-        TestingAuthenticationToken authentication = new TestingAuthenticationToken(user4, "Credentials");
+        MockMvcBuilders.standaloneSetup(studentController)
+                .build()
+                .perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.view().name("student/available-subjects"));
 
-        assertEquals("student/available-subjects",
-                studentController.getUserAvailableSubjects(authentication, new ConcurrentModel()));
-        verify(subjectDAO).findAll();
-        verify(user4).getStudent();
-        verify(student4).getStudentId();
-        verify(student4).setApplications(Mockito.<List<Application>>any());
-        verify(student4).setAverageGrade(anyFloat());
-        verify(student4).setEmail(Mockito.<String>any());
-        verify(student4).setFirstName(Mockito.<String>any());
-        verify(student4).setLastName(Mockito.<String>any());
-        verify(student4).setRemainingCourses(anyInt());
-        verify(student4).setStudentId(anyInt());
-        verify(student4).setUser(Mockito.<User>any());
     }
 
     /**
@@ -152,15 +106,6 @@ class StudentControllerTest {
      */
     @Test
     void testApplySubject() throws Exception {
-        Subject subject = new Subject();
-        subject.setDescription("The characteristics of someone or something");
-        subject.setProfessor(new Professor());
-        subject.setSubjectId(1);
-        subject.setThesis(new Thesis());
-        subject.setTitle("Dr");
-        when(studentService.findById(anyInt())).thenReturn(new Student());
-        when(studentService.findSubjectById(anyInt())).thenReturn(subject);
-        doNothing().when(studentService).saveApplication(Mockito.<Application>any());
         MockHttpServletRequestBuilder getResult = MockMvcRequestBuilders.get("/student/apply-subject");
         MockHttpServletRequestBuilder paramResult = getResult.param("subjectId", String.valueOf(1));
         MockHttpServletRequestBuilder requestBuilder = paramResult.param("thisStudentId", String.valueOf(1));
@@ -177,11 +122,20 @@ class StudentControllerTest {
      * Method under test: {@link StudentController#changeDetails(Authentication, Model)}
      */
     @Test
-    void testChangeDetails() {
-        StudentController studentController = new StudentController(new StudentServiceImpl());
-        TestingAuthenticationToken authentication = new TestingAuthenticationToken(new User(), "Credentials");
+    void testChangeDetails() throws Exception {
+        User user = mock(User.class);
+        doNothing().when(user).setStudent(Mockito.<Student>any());
+        when(user.getStudent()).thenReturn(new Student());
 
-        assertEquals("student/student-details", studentController.changeDetails(authentication, new ConcurrentModel()));
+        TestingAuthenticationToken authentication = new TestingAuthenticationToken(user, "Credentials");
+
+        MockHttpServletRequestBuilder requestBuilder = post("/student/change").principal(authentication);
+
+        MockMvcBuilders.standaloneSetup(studentController)
+                .build()
+                .perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andExpect(view().name("student/student-details"));
     }
 
 
@@ -189,18 +143,24 @@ class StudentControllerTest {
      * Method under test: {@link StudentController#saveDetails(Authentication, Student)}
      */
     @Test
-    void testSaveDetails() {
-        StudentDAO theStudentRepository = mock(StudentDAO.class);
-        when(theStudentRepository.save(Mockito.<Student>any())).thenReturn(new Student());
-        StudentController studentController = new StudentController(new StudentServiceImpl(theStudentRepository,
-                mock(SubjectDAO.class), mock(ApplicationDAO.class), mock(SubjectDAO.class)));
+    void testSaveDetails() throws Exception {
+        Student student = new Student(1,"John", "Doe", "email",1,1);
 
-        User user7 = mock(User.class);
-        when(user7.getStudent()).thenReturn(new Student());
-        TestingAuthenticationToken authentication = new TestingAuthenticationToken(user7, "Credentials");
-        assertEquals("redirect:/student/dashboard", studentController.saveDetails(authentication, new Student()));
-        verify(theStudentRepository).save(Mockito.<Student>any());
-        verify(user7).getStudent();
+        User user = mock(User.class);
+        doNothing().when(user).setProfessor(Mockito.<Professor>any());
+        when(user.getStudent()).thenReturn(student);
+
+        TestingAuthenticationToken authentication = new TestingAuthenticationToken(user, "Credentials");
+
+        MockHttpServletRequestBuilder requestBuilder = post("/student/save_details").
+                principal(authentication).
+                flashAttr("student", student);
+
+        MockMvcBuilders.standaloneSetup(studentController)
+                .build()
+                .perform(requestBuilder)
+                .andExpect(status().isFound())
+                .andExpect(MockMvcResultMatchers.redirectedUrl("/student/dashboard"));
     }
 }
 

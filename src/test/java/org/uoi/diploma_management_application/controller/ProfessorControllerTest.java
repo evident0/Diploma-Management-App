@@ -49,6 +49,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.servlet.ModelAndView;
 import org.uoi.diploma_management_application.dao.ApplicationDAO;
 import org.uoi.diploma_management_application.dao.ProfessorDAO;
 import org.uoi.diploma_management_application.dao.SubjectDAO;
@@ -72,9 +73,6 @@ class ProfessorControllerTest {
     @Autowired
     private ProfessorController professorController;
 
-    //@MockBean
-    //private Authentication authentication;
-
     @MockBean
     private ProfessorService professorService;
 
@@ -91,160 +89,47 @@ class ProfessorControllerTest {
                 .build();
     }
 
-
-    /**
-     * Method under test: {@link ProfessorController#getProfessorHome(Authentication, Model)}
-     */
-    @Test
-    void testGetProfessorHome() {
-        ProfessorDAO theProfessorRepository = mock(ProfessorDAO.class);
-        when(theProfessorRepository.findById(anyInt())).thenReturn(new Professor());
-        ProfessorController professorController = new ProfessorController(new ProfessorServiceImpl(theProfessorRepository,
-                mock(SubjectDAO.class), mock(ThesisDAO.class), mock(ApplicationDAO.class)));
-
-        User user = mock(User.class);
-        doNothing().when(user).setProfessor(Mockito.<Professor>any());
-        when(user.getProfessor()).thenReturn(new Professor());
-        TestingAuthenticationToken authentication = new TestingAuthenticationToken(user, "Credentials");
-
-        assertEquals("professor/dashboard", professorController.getProfessorHome(authentication, new ConcurrentModel()));
-        verify(theProfessorRepository).findById(anyInt());
-        verify(user, atLeast(1)).getProfessor();
-        verify(user).setProfessor(Mockito.<Professor>any());
-    }
-
-    /**
-     * Method under test: {@link ProfessorController#saveSubject(Authentication, Subject)}
-     */
-    @Test
-    void testSaveSubject() {
-        SubjectDAO theSubjectRepository = mock(SubjectDAO.class);
-        when(theSubjectRepository.save(Mockito.<Subject>any())).thenReturn(new Subject());
-        ProfessorController professorController = new ProfessorController(new ProfessorServiceImpl(
-                mock(ProfessorDAO.class), theSubjectRepository, mock(ThesisDAO.class), mock(ApplicationDAO.class)));
-        TestingAuthenticationToken authentication = new TestingAuthenticationToken(new User(), "Credentials");
-
-        Subject theSubject = new Subject();
-        assertEquals("redirect:/professor/dashboard", professorController.saveSubject(authentication, theSubject));
-        verify(theSubjectRepository).save(Mockito.<Subject>any());
-    }
-
     /**
      * Method under test: {@link ProfessorController#changeDetails(Authentication, Model)}
      */
     @Test
-    void testChangeDetails() {
+    void testChangeDetails() throws Exception {
 
-        TestingAuthenticationToken authentication = new TestingAuthenticationToken(new User(), "Credentials");
+        User user = mock(User.class);
+        doNothing().when(user).setProfessor(Mockito.<Professor>any());
+        when(user.getProfessor()).thenReturn(new Professor());
 
-        assertEquals("professor/professor-details",
-                professorController.changeDetails(authentication, new ConcurrentModel()));
-    }
+        TestingAuthenticationToken authentication = new TestingAuthenticationToken(user, "Credentials");
 
-    public interface WithSecurityContextFactory<A extends Annotation> {
+        MockHttpServletRequestBuilder requestBuilder = post("/professor/change").principal(authentication);
 
-        SecurityContext createSecurityContext(A annotation);
-    }
-/*
-    public class ControllerTestablekserogwti extends ProfessorController {
-
-        @Autowired
-        public ControllerTestablekserogwti(ProfessorService theProfessorService) {
-            professorService = theProfessorService;
-        }
-        @Override
-        public Professor getProfessorByAuthentication(Authentication authentication) {
-            return new Professor();
-        }
-    }
-
-
-    @Test
-    @WithMockUser(roles="PROFESSOR")
-    void testSaveDetails() throws Exception {
-
-        Professor professor = new Professor("Bob", "Mastoras", "bob@mail");
-        // Create a mock Professor object
-        Professor mockProfessor = new Professor();
-        mockProfessor.setFirstName("John Doe");
-
-        // Create a User object with a non-null Professor field
-        User user = new User();
-        user.setProfessor(mockProfessor);
-
-        MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
-        multiValueMap.add("pId", Integer.toString(professor.getPId()));
-        multiValueMap.add("firstName", professor.getFirstName());
-        multiValueMap.add("lastName", professor.getLastName());
-        multiValueMap.add("email", professor.getEmail());
-
-        when(professorController.getProfessorByAuthentication(any())).thenReturn(professor);
-
-        //when((User) authentication.getPrincipal()).thenReturn(new User());
-        mockMvc.perform(
-                        post("/professor/save_details").with(authentication(new UsernamePasswordAuthenticationToken(user, null)))
-                                .params(multiValueMap))
-                .andExpect(status().isFound())
-                .andExpect(view().name("redirect:/professor/dashboard"));
-
-        MockHttpServletRequestBuilder paramResult = MockMvcRequestBuilders.post("/professor/save_details")
-                .params(multiValueMap);
-        System.out.println("sdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"+paramResult);
         MockMvcBuilders.standaloneSetup(professorController)
                 .build()
-                .perform(paramResult)
-                .andExpect(MockMvcResultMatchers.status().isFound())
-                .andExpect(MockMvcResultMatchers.view().name("redirect:/professor/dashboard"))
-                .andExpect(MockMvcResultMatchers.redirectedUrl("/professor/dashboard"));
-
+                .perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andExpect(view().name("professor/professor-details"));
     }
 
     @Test
-    @WithMockUser(roles="PROFESSOR")
-    @WithUserDetails("janedoe")
-    public void test2SaveDetails() throws Exception {
-        // Create a mock Professor object
-        Professor mockProfessor = new Professor();
-        mockProfessor.setFirstName("John Doe");
+    void testSaveDetails() throws Exception {
 
-        // Create a User object with a non-null Professor field
-        User user = new User();
-        user.setProfessor(mockProfessor);
+        Professor professor = new Professor(1,"John", "Doe", "email");
 
-        // Override the behavior of getProfessorByAuthentication() to return the User's Professor
-        when(professorController.getProfessorByAuthentication(any(Authentication.class))).thenAnswer((Answer<Professor>) invocation -> {
-            Authentication auth = invocation.getArgument(0);
-            User u = (User) auth.getPrincipal();
-            return u.getProfessor();
-        });
+        User user = mock(User.class);
+        doNothing().when(user).setProfessor(Mockito.<Professor>any());
+        when(user.getProfessor()).thenReturn(professor);
 
-        // Perform the request with the User object as the Authentication principal
-        mockMvc.perform(post("/professor/save_details")
-                        .with(authentication(new UsernamePasswordAuthenticationToken(user, null)))
-                        .flashAttr("professor", mockProfessor))
+        TestingAuthenticationToken authentication = new TestingAuthenticationToken(user, "Credentials");
+
+        MockHttpServletRequestBuilder requestBuilder = post("/professor/save_details").
+                principal(authentication).
+                flashAttr("professor", professor);
+
+        MockMvcBuilders.standaloneSetup(professorController)
+                .build()
+                .perform(requestBuilder)
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/professor/dashboard"));
-    }
-    */
-
-    /**
-     * Method under test: {@link ProfessorController#updateGrade(int, Model)}
-     */
-    @Test
-    void testUpdateGrade2() {
-        //   Diffblue Cover was unable to write a Spring test,
-        //   so wrote a non-Spring test instead.
-        //   Reason: R013 No inputs found that don't throw a trivial exception.
-        //   Diffblue Cover tried to run the arrange/act section, but the method under
-        //   test threw
-        //   javax.servlet.ServletException: Circular view path [/professor/update-grade]: would dispatch back to the current handler URL [/professor/update-grade] again. Check your ViewResolver setup! (Hint: This may be the result of an unspecified view, due to default view name generation.)
-        //       at javax.servlet.http.HttpServlet.service(HttpServlet.java:655)
-        //       at javax.servlet.http.HttpServlet.service(HttpServlet.java:764)
-        //   See https://diff.blue/R013 to resolve this issue.
-
-        ProfessorController professorController = new ProfessorController(new ProfessorServiceImpl(
-                mock(ProfessorDAO.class), mock(SubjectDAO.class), mock(ThesisDAO.class), mock(ApplicationDAO.class)));
-        assertEquals("/professor/update-grade", professorController.updateGrade(1, new ConcurrentModel()));
+                .andExpect(MockMvcResultMatchers.redirectedUrl("/professor/dashboard"));
     }
 
     /**
@@ -253,23 +138,6 @@ class ProfessorControllerTest {
     @Test
     void testCreateSubject() throws Exception {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/professor/create-subject");
-        MockMvcBuilders.standaloneSetup(professorController)
-                .build()
-                .perform(requestBuilder)
-                .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.model().size(1))
-                .andExpect(MockMvcResultMatchers.model().attributeExists("subject"))
-                .andExpect(view().name("professor/create-subject"))
-                .andExpect(MockMvcResultMatchers.forwardedUrl("professor/create-subject"));
-    }
-
-    /**
-     * Method under test: {@link ProfessorController#createSubject(Authentication, Model)}
-     */
-    @Test
-    void testCreateSubject2() throws Exception {
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/professor/create-subject");
-        requestBuilder.characterEncoding("Encoding");
         MockMvcBuilders.standaloneSetup(professorController)
                 .build()
                 .perform(requestBuilder)
@@ -296,6 +164,7 @@ class ProfessorControllerTest {
                 .andExpect(view().name("redirect:/professor/dashboard"))
                 .andExpect(redirectedUrl("/professor/dashboard"));
     }
+
 
     /**
      * Method under test: {@link ProfessorController#pickByThresholds(float, int, int)}
@@ -329,7 +198,7 @@ class ProfessorControllerTest {
         subject.setProfessor(new Professor());
         subject.setSubjectId(1);
         subject.setThesis(new Thesis());
-        subject.setTitle("Dr");
+        subject.setTitle("Quantum Encryption");
         when(professorService.assignThesis(Mockito.<Student>any(), Mockito.<Subject>any())).thenReturn(1);
         when(professorService.findStudentsBySubjectId(anyInt())).thenReturn(new ArrayList<>());
         when(professorService.findSubjectById(anyInt())).thenReturn(subject);
@@ -351,7 +220,7 @@ class ProfessorControllerTest {
     @Test
     void testSaveGrade() throws Exception {
         Thesis thesis = new Thesis();
-        thesis.setDescription("The characteristics of someone or something");
+        thesis.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit.");
         thesis.setGrade(10.0f);
         thesis.setTId(1);
         thesis.setTitle("Dr");
@@ -373,17 +242,104 @@ class ProfessorControllerTest {
     }
 
     /**
+     * Method under test: {@link ProfessorController#getProfessorHome(Authentication, Model)}
+     */
+    @Test
+    void testGetProfessorHome() throws Exception {
+        Professor professor = new Professor();
+
+        User user = mock(User.class);
+        doNothing().when(user).setProfessor(Mockito.<Professor>any());
+        when(user.getProfessor()).thenReturn(professor);
+
+        TestingAuthenticationToken authentication = new TestingAuthenticationToken(user, "Credentials");
+
+        MockHttpServletRequestBuilder requestBuilder = post("/professor/dashboard").
+                principal(authentication).
+                flashAttr("professor", professor);
+
+        MockMvcBuilders.standaloneSetup(professorController)
+                .build()
+                .perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andExpect(view().name("professor/dashboard"));
+
+    }
+
+    /**
      * Method under test: {@link ProfessorController#viewApplications(int, Model)}
      */
     @Test
     void testViewApplications() throws Exception {
-        when(professorService.findStudentsBySubjectId(anyInt())).thenReturn(new ArrayList<>());
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/professor/applications")
-                .param("subjectId", "https://example.org/example");
+
+        Professor professor = new Professor();
+
+        User user = mock(User.class);
+        doNothing().when(user).setProfessor(Mockito.<Professor>any());
+        when(user.getProfessor()).thenReturn(professor);
+
+        TestingAuthenticationToken authentication = new TestingAuthenticationToken(user, "Credentials");
+
+        MockHttpServletRequestBuilder requestBuilder = post("/professor/applications")
+                .principal(authentication)
+                .param("subjectId", String.valueOf(1));
         ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(professorController)
                 .build()
-                .perform(requestBuilder);
-        actualPerformResult.andExpect(status().is(400));
+                .perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andExpect(view().name("professor/applications-list"));
+
     }
+
+    /**
+     * Method under test: {@link ProfessorController#saveSubject(Authentication, Subject)}
+     */
+    @Test
+    void testSaveSubject() {
+        SubjectDAO theSubjectRepository = mock(SubjectDAO.class);
+        when(theSubjectRepository.save(Mockito.<Subject>any())).thenReturn(new Subject());
+        ProfessorController professorController = new ProfessorController(new ProfessorServiceImpl(
+                mock(ProfessorDAO.class), theSubjectRepository, mock(ThesisDAO.class), mock(ApplicationDAO.class)));
+        TestingAuthenticationToken authentication = new TestingAuthenticationToken(new User(), "Credentials");
+
+        Subject theSubject = new Subject();
+        assertEquals("redirect:/professor/dashboard", professorController.saveSubject(authentication, theSubject));
+        verify(theSubjectRepository).save(Mockito.<Subject>any());
+    }
+
+    @Test
+    void testSaveDetails2(){
+        ProfessorDAO theProfessorRepository = mock(ProfessorDAO.class);
+        when(theProfessorRepository.save(Mockito.<Professor>any())).thenReturn(new Professor());
+        ProfessorController professorController = new ProfessorController(new ProfessorServiceImpl(theProfessorRepository,
+                mock(SubjectDAO.class), mock(ThesisDAO.class), mock(ApplicationDAO.class)));
+
+        Professor professor = new Professor(1,"John", "Doe", "email");
+
+        User user = mock(User.class);
+        doNothing().when(user).setProfessor(Mockito.<Professor>any());
+        when(user.getProfessor()).thenReturn(new Professor());
+        TestingAuthenticationToken authentication = new TestingAuthenticationToken(user, "Credentials");
+        assertEquals("redirect:/professor/dashboard", professorController.saveDetails(authentication, professor));
+        verify(theProfessorRepository).save(Mockito.<Professor>any());
+    }
+
+    /**
+     * Method under test: {@link ProfessorController#updateGrade(int, Model)}
+     */
+    @Test
+    void testUpdateGrade() throws Exception {
+
+        doNothing().when(professorService).deleteSubjectById(anyInt());
+        MockHttpServletRequestBuilder getResult = MockMvcRequestBuilders.get("/professor/update-grade");
+        MockHttpServletRequestBuilder requestBuilder = getResult.param("thesisId", String.valueOf(5));
+        MockMvcBuilders.standaloneSetup(professorController)
+                .build()
+                .perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andExpect(view().name("/professor/update-grade-form"));
+    }
+
+
 }
 

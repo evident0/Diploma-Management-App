@@ -1,18 +1,5 @@
 
---
--- Table structure for table `employee`
---
-
-
-DROP TABLE IF EXISTS application;
-DROP TABLE IF EXISTS thesis;
-DROP TABLE IF EXISTS subject;
-DROP TABLE IF EXISTS professor;
-DROP TABLE IF EXISTS student;
-DROP TABLE IF EXISTS users;
-
-
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
                          `id` int(11) NOT NULL AUTO_INCREMENT,
                          `user_name` varchar(45) DEFAULT NULL UNIQUE,
                          `password` text DEFAULT NULL,
@@ -21,7 +8,7 @@ CREATE TABLE users (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 
-CREATE TABLE professor (
+CREATE TABLE IF NOT EXISTS professor (
                             `p_id` int(11) NOT NULL AUTO_INCREMENT,
                             `first_name` varchar(45) DEFAULT NULL,
                             `last_name` varchar(45) DEFAULT NULL,
@@ -31,7 +18,7 @@ CREATE TABLE professor (
                             FOREIGN KEY (`id`) REFERENCES users(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
-CREATE TABLE student (
+CREATE TABLE IF NOT EXISTS student (
                          `student_id` int(11) NOT NULL AUTO_INCREMENT,
                          `first_name` varchar(45) DEFAULT NULL,
                          `last_name` varchar(45) DEFAULT NULL,
@@ -43,7 +30,7 @@ CREATE TABLE student (
                          FOREIGN KEY (`id`) REFERENCES users(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
-CREATE TABLE subject (
+CREATE TABLE IF NOT EXISTS subject (
                          `subject_id` int(11) NOT NULL AUTO_INCREMENT,
                          `title` varchar(45) DEFAULT NULL,
                          `description` varchar(128) DEFAULT NULL,
@@ -53,7 +40,7 @@ CREATE TABLE subject (
 
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
-CREATE TABLE thesis (
+CREATE TABLE IF NOT EXISTS thesis (
                             `t_id` int(11) NOT NULL AUTO_INCREMENT,
                             `title` varchar(45) DEFAULT NULL,
                             `description` varchar(128) DEFAULT NULL,
@@ -70,7 +57,7 @@ CREATE TABLE thesis (
 
 
 
-CREATE TABLE application (
+CREATE TABLE IF NOT EXISTS application (
                              subject_id int(11),
                              student_id int(11),
                              PRIMARY KEY (subject_id, student_id),

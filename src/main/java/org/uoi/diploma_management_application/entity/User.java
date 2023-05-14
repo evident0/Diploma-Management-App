@@ -35,6 +35,7 @@ public class User implements UserDetails{
     @OneToOne(targetEntity = Student.class, cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
     private Student student;
 
+
     public Professor getProfessor() {
     	return professor;
     }

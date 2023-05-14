@@ -61,10 +61,11 @@ class ProfessorServiceImplTest {
     @Test
     void testFindAll() {
         ArrayList<Professor> professorList = new ArrayList<>();
+        professorList.add(new Professor(1,"BOB","SMITH","EMAIL"));
+
         when(professorDAO.findAll()).thenReturn(professorList);
         List<Professor> actualFindAllResult = professorServiceImpl.findAll();
         assertSame(professorList, actualFindAllResult);
-        assertTrue(actualFindAllResult.isEmpty());
         verify(professorDAO).findAll();
     }
 
@@ -72,7 +73,7 @@ class ProfessorServiceImplTest {
      * Method under test: {@link ProfessorServiceImpl#findAll()}
      */
     @Test
-    void testFindAll2() {
+    void testFindAllException() {
         when(professorDAO.findAll()).thenThrow(new RuntimeException("An error occurred"));
         assertThrows(RuntimeException.class, () -> professorServiceImpl.findAll());
         verify(professorDAO).findAll();
@@ -84,7 +85,6 @@ class ProfessorServiceImplTest {
     @Test
     void testFindById() {
 
-
         Professor professor = new Professor();
         professor.setEmail("jane.doe@example.org");
         professor.setFirstName("Jane");
@@ -93,7 +93,7 @@ class ProfessorServiceImplTest {
         professor.setUser(new User());
         when(professorDAO.findById(1)).thenReturn(professor);
         assertSame(professor, professorServiceImpl.findById(1));
-        verify(professorDAO).findById(anyInt());
+        verify(professorDAO).findById(1);
     }
 
     @Test
@@ -134,7 +134,7 @@ class ProfessorServiceImplTest {
         professor.setUser(new User());
 
         Thesis thesis = new Thesis();
-        thesis.setDescription("The characteristics of someone or something");
+        thesis.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit.");
         thesis.setGrade(10.0f);
         thesis.setTId(1);
         thesis.setTitle("Dr");
@@ -147,7 +147,7 @@ class ProfessorServiceImplTest {
 
         applications.add(application);
 
-        subject.setDescription("The characteristics of someone or something");
+        subject.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit.");
         subject.setProfessor(professor);
         subject.setSubjectId(1);
         subject.setThesis(thesis);
@@ -166,14 +166,14 @@ class ProfessorServiceImplTest {
     void testFindSubjectById() {
 
         Subject subject = new Subject();
-        subject.setDescription("The characteristics of someone or something");
+        subject.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit.");
         subject.setProfessor(new Professor());
         subject.setSubjectId(1);
         subject.setThesis(new Thesis());
-        subject.setTitle("Dr");
-        when(subjectDAO.findById(anyInt())).thenReturn(subject);
+        subject.setTitle("Quantum Theory");
+        when(subjectDAO.findById(1)).thenReturn(subject);
         assertSame(subject, professorServiceImpl.findSubjectById(1));
-        verify(subjectDAO).findById(anyInt());
+        verify(subjectDAO).findById(1);
     }
 
     /**
@@ -181,15 +181,15 @@ class ProfessorServiceImplTest {
      */
     @Test
     void testFindByFirstName() {
-        Professor professor4 = new Professor();
-        professor4.setEmail("jane.doe@example.org");
-        professor4.setFirstName("Jane");
-        professor4.setLastName("Doe");
-        professor4.setPId(1);
-        professor4.setUser(new User());
-        when(professorDAO.findByFirstName(Mockito.<String>any())).thenReturn(professor4);
-        assertSame(professor4, professorServiceImpl.findByFirstName("Jane"));
-        verify(professorDAO).findByFirstName(Mockito.<String>any());
+        Professor professor = new Professor();
+        professor.setEmail("jane.doe@example.org");
+        professor.setFirstName("Jane");
+        professor.setLastName("Doe");
+        professor.setPId(1);
+        professor.setUser(new User());
+        when(professorDAO.findByFirstName("Jane")).thenReturn(professor);
+        assertSame(professor, professorServiceImpl.findByFirstName("Jane"));
+        verify(professorDAO).findByFirstName("Jane");
     }
 
     /**
@@ -215,21 +215,21 @@ class ProfessorServiceImplTest {
     @Test
     void testSaveThesis() {
         Thesis thesis = new Thesis();
-        thesis.setDescription("The characteristics of someone or something");
+        thesis.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit.");
         thesis.setGrade(10.0f);
         thesis.setTId(1);
-        thesis.setTitle("Dr");
+        thesis.setTitle("Quantum Theory");
         when(thesisDAO.save(Mockito.<Thesis>any())).thenReturn(thesis);
 
         Thesis theThesis = new Thesis();
-        theThesis.setDescription("The characteristics of someone or something");
+        theThesis.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit.");
         theThesis.setGrade(10.0f);
         theThesis.setTId(1);
-        theThesis.setTitle("Dr");
+        theThesis.setTitle("Quantum Theory");
         professorServiceImpl.saveThesis(theThesis);
         verify(thesisDAO).save(Mockito.<Thesis>any());
-        assertEquals("The characteristics of someone or something", theThesis.getDescription());
-        assertEquals("Dr", theThesis.getTitle());
+        assertEquals("Lorem ipsum dolor sit amet, consectetur adipiscing elit.", theThesis.getDescription());
+        assertEquals("Quantum Theory", theThesis.getTitle());
         assertEquals(1, theThesis.getTId());
         assertEquals(10.0f, theThesis.getGrade());
         assertTrue(professorServiceImpl.findAll().isEmpty());
@@ -239,14 +239,14 @@ class ProfessorServiceImplTest {
      * Method under test: {@link ProfessorServiceImpl#saveThesis(Thesis)}
      */
     @Test
-    void testSaveThesis2() {
+    void testSaveThesisException() {
         when(thesisDAO.save(Mockito.<Thesis>any())).thenThrow(new RuntimeException("An error occurred"));
 
         Thesis theThesis = new Thesis();
-        theThesis.setDescription("The characteristics of someone or something");
+        theThesis.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit.");
         theThesis.setGrade(10.0f);
         theThesis.setTId(1);
-        theThesis.setTitle("Dr");
+        theThesis.setTitle("Quantum Theory");
         assertThrows(RuntimeException.class, () -> professorServiceImpl.saveThesis(theThesis));
         verify(thesisDAO).save(Mockito.<Thesis>any());
     }
@@ -277,10 +277,10 @@ class ProfessorServiceImplTest {
         professor4.setUser(new User());
 
         Thesis thesis2 = new Thesis();
-        thesis2.setDescription("The characteristics of someone or something");
+        thesis2.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit.");
         thesis2.setGrade(10.0f);
         thesis2.setTId(1);
-        thesis2.setTitle("Dr");
+        thesis2.setTitle("Quantum Theory");
 
         Subject theSubject = new Subject();
 
@@ -290,11 +290,11 @@ class ProfessorServiceImplTest {
 
         theSubject.setApplications(applications);
 
-        theSubject.setDescription("The characteristics of someone or something");
+        theSubject.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit.");
         theSubject.setProfessor(professor4);
         theSubject.setSubjectId(1);
         theSubject.setThesis(thesis2);
-        theSubject.setTitle("Dr");
+        theSubject.setTitle("Quantum Theory");
         professorServiceImpl.saveSubject(theSubject);
         verify(subjectDAO).save(theSubject);
 
@@ -307,7 +307,7 @@ class ProfessorServiceImplTest {
     void testDeleteSubjectById() {
         doNothing().when(subjectDAO).deleteById(Mockito.<Integer>any());
         professorServiceImpl.deleteSubjectById(1);
-        verify(subjectDAO).deleteById(Mockito.<Integer>any());
+        verify(subjectDAO).deleteById(1);
         assertTrue(professorServiceImpl.findAll().isEmpty());
     }
 
@@ -315,7 +315,7 @@ class ProfessorServiceImplTest {
      * Method under test: {@link ProfessorServiceImpl#deleteSubjectById(int)}
      */
     @Test
-    void testDeleteSubjectById2() {
+    void testDeleteSubjectByIdException() {
         doThrow(new RuntimeException("An error occurred")).when(subjectDAO).deleteById(Mockito.<Integer>any());
         assertThrows(RuntimeException.class, () -> professorServiceImpl.deleteSubjectById(1));
         verify(subjectDAO).deleteById(Mockito.<Integer>any());
@@ -336,7 +336,7 @@ class ProfessorServiceImplTest {
      * Method under test: {@link ProfessorServiceImpl#deleteApplicationById(ApplicationKey)}
      */
     @Test
-    void testDeleteApplicationById2() {
+    void testDeleteApplicationByIdException() {
         doThrow(new RuntimeException("An error occurred")).when(applicationDAO).deleteById(Mockito.<ApplicationKey>any());
         assertThrows(RuntimeException.class, () -> professorServiceImpl.deleteApplicationById(new ApplicationKey()));
         verify(applicationDAO).deleteById(Mockito.<ApplicationKey>any());
@@ -357,7 +357,7 @@ class ProfessorServiceImplTest {
      * Method under test: {@link ProfessorServiceImpl#deleteById(int)}
      */
     @Test
-    void testDeleteById2() {
+    void testDeleteByIdException() {
         doThrow(new RuntimeException("An error occurred")).when(professorDAO).deleteById(Mockito.<Integer>any());
         assertThrows(RuntimeException.class, () -> professorServiceImpl.deleteById(1));
         verify(professorDAO).deleteById(Mockito.<Integer>any());
@@ -385,10 +385,10 @@ class ProfessorServiceImplTest {
     @Test
     void testFindThesisById() {
         Thesis thesis = new Thesis();
-        thesis.setDescription("The characteristics of someone or something");
+        thesis.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit.");
         thesis.setGrade(10.0f);
         thesis.setTId(1);
-        thesis.setTitle("Dr");
+        thesis.setTitle("Quantum Theory");
         when(thesisDAO.findById(anyInt())).thenReturn(thesis);
         assertSame(thesis, professorServiceImpl.findThesisById(1));
         verify(thesisDAO).findById(anyInt());
@@ -419,11 +419,11 @@ class ProfessorServiceImplTest {
         professor.setUser(new User());
 
         Subject subject = new Subject();
-        subject.setDescription("The characteristics of someone or something");
+        subject.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit.");
         subject.setProfessor(professor);
         subject.setSubjectId(1);
         subject.setThesis(null);
-        subject.setTitle("Dr");
+        subject.setTitle("Quantum Theory");
 
         Student student = new Student();
         student.setApplications(new ArrayList<>());
@@ -455,16 +455,16 @@ class ProfessorServiceImplTest {
     @Test
     void testSaveThesisGrade() {
         Thesis thesis = new Thesis();
-        thesis.setDescription("The characteristics of someone or something");
+        thesis.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit.");
         thesis.setGrade(10.0f);
         thesis.setTId(1);
-        thesis.setTitle("Dr");
+        thesis.setTitle("Quantum Theory");
 
         Thesis thesis2 = new Thesis();
-        thesis2.setDescription("The characteristics of someone or something");
+        thesis2.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit.");
         thesis2.setGrade(10.0f);
         thesis2.setTId(1);
-        thesis2.setTitle("Dr");
+        thesis2.setTitle("Quantum Theory");
         professorServiceImpl.saveThesisGrade(thesis2, 10.0f);
         verify(thesisDAO).save(Mockito.<Thesis>any());
         assertEquals(10.0f, thesis2.getGrade());
@@ -477,10 +477,10 @@ class ProfessorServiceImplTest {
     void testSaveThesisGrade2() {
         Thesis thesis2 = mock(Thesis.class);
 
-        thesis2.setDescription("The characteristics of someone or something");
+        thesis2.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit.");
         thesis2.setGrade(10.0f);
         thesis2.setTId(1);
-        thesis2.setTitle("Dr");
+        thesis2.setTitle("Quantum Theory");
         professorServiceImpl.saveThesisGrade(thesis2, 10.0f);
         verify(thesisDAO).save(Mockito.<Thesis>any());
         verify(thesis2).setDescription(Mockito.<String>any());

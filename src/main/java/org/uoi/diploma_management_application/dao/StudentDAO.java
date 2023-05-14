@@ -8,7 +8,7 @@ import org.uoi.diploma_management_application.entity.Student;
 @Repository
 public interface StudentDAO extends JpaRepository<Student, Integer> {
 
-    public Student findById(int p_Id);
+    public Student findById(int studentId);
 
 
 }

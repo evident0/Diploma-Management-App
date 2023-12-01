@@ -3,8 +3,8 @@
 
 # Description
 
-A full stack project to manage thesis applications and grading. It supports user authentication, a user can be a course professor or a student. A student can view all available thesis created by each professor and apply to any that interest him. 
-A professor can view all applications for all the thesis he created and accept students manually or by using an algorithm. Aditionally Professors can assign grades and modify/create new thesis.
+A full stack project to manage thesis applications and grading. It supports user authentication, where a user can be either a course professor or a student. A student can view all available thesis created by each professor and apply to any that interests them. 
+ Professors, on the other hand, can view all applications for the thesis they created and accept students manually or with the use of an algorithm. Aditionally Professors can assign grades to students and modify or create new thesis.
 
 # Getting Started
 
